@@ -17,6 +17,10 @@
   <packaging>jar</packaging>
   <description>Ness HTTP client testing component.</description>
 
+  <properties>
+    <ness.root.dir>${project.parent.basedir}</ness.root.dir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.nesscomputing.components</groupId>
