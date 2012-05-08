@@ -18,7 +18,6 @@ package com.nesscomputing.httpclient.factory.httpclient4;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +36,7 @@ import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.Cookie;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -58,7 +58,6 @@ import org.apache.http.cookie.ClientCookie;
 import org.apache.http.cookie.params.CookieSpecPNames;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.InputStreamEntity;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
@@ -128,8 +127,8 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
         registry.register(HTTP_SCHEME);
 
         try {
-            TrustManager[] trustManagers = {getTrustManager(clientDefaults)};
-            KeyManager[] keyManagers = getKeyManagers(clientDefaults);
+            final TrustManager[] trustManagers = new TrustManager [] { getTrustManager(clientDefaults) };
+            final KeyManager[] keyManagers = getKeyManagers(clientDefaults);
 
             final SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(keyManagers, trustManagers, null);
@@ -153,23 +152,22 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
      */
     @Nonnull
     private static TrustManager getTrustManager(HttpClientDefaults clientDefaults)
-        throws GeneralSecurityException, IOException {
-
+        throws GeneralSecurityException, IOException
+    {
         X509TrustManager trustManager;
 
         if (clientDefaults.getSSLTruststore() == null || clientDefaults.getSSLTruststorePassword() == null) {
             LOG.trace("Not using custom truststore");
             trustManager = HttpClientTrustManagerFactory.getDefaultTrustManager();
         } else {
-            LOG.trace("Using custom truststore at " + clientDefaults.getSSLTruststore());
+            LOG.trace("Using custom truststore at %s", clientDefaults.getSSLTruststore());
             final MultiTrustManager multiTrustManager = new MultiTrustManager();
 
             if (clientDefaults.useSSLTruststoreFallback()) {
                 LOG.trace("Adding fallback to default trust manager");
                 multiTrustManager.addTrustManager(HttpClientTrustManagerFactory.getDefaultTrustManager());
             }
-            multiTrustManager
-                .addTrustManager(HttpClientTrustManagerFactory.getTrustManagerForHttpClientDefaults(clientDefaults));
+            multiTrustManager.addTrustManager(HttpClientTrustManagerFactory.getTrustManagerForHttpClientDefaults(clientDefaults));
 
             trustManager = multiTrustManager;
         }
@@ -258,14 +256,8 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
         }
 
         if (content instanceof String) {
-            try {
-                LOG.debug("Returning String based body source.");
-                return new InternalHttpBodySource(new StringEntity((String) content, "UTF-8"));
-            } catch (UnsupportedEncodingException uee) {
-                LOG.error(uee,
-                    "UTF-8 encoding is missing, something is really messed up. Have a nice day.");
-                throw new IllegalStateException(uee);
-            }
+            LOG.debug("Returning String based body source.");
+            return new InternalHttpBodySource(new BetterStringEntity(String.class.cast(content), Charsets.UTF_8));
         } else if (content instanceof byte[]) {
             LOG.debug("Returning byte array based body source.");
             return new InternalHttpBodySource(new ByteArrayEntity((byte[]) content));
