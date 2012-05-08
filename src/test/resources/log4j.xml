@@ -20,7 +20,7 @@
         </layout>
     </appender>
 
-    <logger name="io.trumpet">
+    <logger name="com.nesscomputing">
         <level value="debug" />
     </logger>
 
