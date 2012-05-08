@@ -105,9 +105,9 @@ public class TestGuiceModule
     @Test
     public void testMultipleWithLifecycle()
     {
-        final Config config = Config.getFixedConfig("trumpet.httpclient.user-agent", "default",
-                                                    "trumpet.httpclient.testing.user-agent", "testing",
-                                                    "trumpet.httpclient.running.user-agent", "running");
+        final Config config = Config.getFixedConfig("ness.httpclient.user-agent", "default",
+                                                    "ness.httpclient.testing.user-agent", "testing",
+                                                    "ness.httpclient.running.user-agent", "running");
 
         final Injector injector = Guice.createInjector(Stage.PRODUCTION,
                                                        new ConfigModule(config),
@@ -149,7 +149,7 @@ public class TestGuiceModule
     @Test
     public void testMultipleWithLifecycleAndDefault()
     {
-        final Config config = Config.getFixedConfig("trumpet.httpclient.user-agent", "default");
+        final Config config = Config.getFixedConfig("ness.httpclient.user-agent", "default");
 
         final Injector injector = Guice.createInjector(Stage.PRODUCTION,
                                                        new ConfigModule(config),

@@ -367,7 +367,7 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
     private <T> T executeRequest(final HttpRequestBase httpRequest,
         final HttpClientRequest<T> httpClientRequest) throws IOException {
         final DefaultHttpClient httpClient = new DefaultHttpClient(connectionManager, params);
-        httpClient.getCookieSpecs().register(NessCookieSpecFactory.TRUMPET_COOKIE_POLICY, new NessCookieSpecFactory());
+        httpClient.getCookieSpecs().register(NessCookieSpecFactory.NESS_COOKIE_POLICY, new NessCookieSpecFactory());
         httpClient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(retries, false));
 
         contributeCookies(httpClient, httpClientRequest);

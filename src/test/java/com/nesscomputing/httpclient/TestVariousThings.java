@@ -229,7 +229,7 @@ public class TestVariousThings
         final String uri = "http://" + localHttpService.getHost() + ":" + localHttpService.getPort() + "/data";
 
 
-        final HttpClientRequest<String> httpRequest = httpClient.get(uri, responseHandler).setVirtualHost("www.trumpet.io", 8080).request();
+        final HttpClientRequest<String> httpRequest = httpClient.get(uri, responseHandler).setVirtualHost("www.nesscomputing.com", 8080).request();
         final String response = httpRequest.perform();
 
         Assert.assertThat(response, is(testString));
@@ -241,7 +241,7 @@ public class TestVariousThings
 
         HttpClientHeader header = hostHeader.get(0);
         Assert.assertThat(header.getName(), is("Host"));
-        Assert.assertThat(header.getValue(), is("www.trumpet.io:8080"));
+        Assert.assertThat(header.getValue(), is("www.nesscomputing.com:8080"));
     }
 }
 

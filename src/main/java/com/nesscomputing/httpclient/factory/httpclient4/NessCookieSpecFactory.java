@@ -29,7 +29,7 @@ import org.apache.http.params.HttpParams;
  */
 public class NessCookieSpecFactory implements CookieSpecFactory
 {
-    public static final String TRUMPET_COOKIE_POLICY = "trumpet";
+    public static final String NESS_COOKIE_POLICY = "ness";
 
     @Override
     public CookieSpec newInstance(final HttpParams params)

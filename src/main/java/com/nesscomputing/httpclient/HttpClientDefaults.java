@@ -22,14 +22,17 @@ import org.skife.config.Default;
 import org.skife.config.DefaultNull;
 import org.skife.config.TimeSpan;
 
-/** Default configuration bean for the HTTP client. Can be configured using config-magic. */
-public class HttpClientDefaults {
+/** 
+ * Default configuration bean for the HTTP client. Can be configured using config-magic.
+ */
+public class HttpClientDefaults
+{
     /**
      * Default is 200.
      *
      * @return The maximum number of connections allowed.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.total-connections-max", "trumpet.httpclient.total-connections-max"})
+    @Config({"ness.httpclient.${httpclient_name}.total-connections-max", "ness.httpclient.total-connections-max"})
     @Default("200")
     public int getTotalConnectionsMax()
     {
@@ -41,7 +44,7 @@ public class HttpClientDefaults {
      *
      * @return The number of connections allowed to a single host/port combination.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.perhost-connections-max", "trumpet.httpclient.perhost-connections-max"})
+    @Config({"ness.httpclient.${httpclient_name}.perhost-connections-max", "ness.httpclient.perhost-connections-max"})
     @Default("20")
     public int getPerHostConnectionsMax()
     {
@@ -53,7 +56,7 @@ public class HttpClientDefaults {
      *
      * @return Timeout connecting to a remote host in milliseconds.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.connection-timeout", "trumpet.httpclient.connection-timeout"})
+    @Config({"ness.httpclient.${httpclient_name}.connection-timeout", "ness.httpclient.connection-timeout"})
     @Default("60s")
     public TimeSpan getConnectionTimeout()
     {
@@ -65,7 +68,7 @@ public class HttpClientDefaults {
      *
      * @return  Socket timeout
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.socket-timeout", "trumpet.httpclient.socket-timeout"})
+    @Config({"ness.httpclient.${httpclient_name}.socket-timeout", "ness.httpclient.socket-timeout"})
     @Default("60s")
     public TimeSpan getSocketTimeout()
     {
@@ -78,7 +81,7 @@ public class HttpClientDefaults {
      * @return Timeout for an established connection in keep-alive until it is closed. If 0,
      *         connections are closed immediately.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.idle-timeout", "trumpet.httpclient.idle-timeout"})
+    @Config({"ness.httpclient.${httpclient_name}.idle-timeout", "ness.httpclient.idle-timeout"})
     @Default("15s")
     public TimeSpan getIdleTimeout()
     {
@@ -90,7 +93,7 @@ public class HttpClientDefaults {
      *
      * @return Timeout for a request sent until a response must arrive.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.request-timeout", "trumpet.httpclient.request-timeout"})
+    @Config({"ness.httpclient.${httpclient_name}.request-timeout", "ness.httpclient.request-timeout"})
     @Default("60s")
     public TimeSpan getRequestTimeout()
     {
@@ -102,7 +105,7 @@ public class HttpClientDefaults {
      *
      * @return true if redirects should be followed automatically.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.follow-redirects", "trumpet.httpclient.follow-redirects"})
+    @Config({"ness.httpclient.${httpclient_name}.follow-redirects", "ness.httpclient.follow-redirects"})
     @Default("true")
     public boolean isFollowRedirects()
     {
@@ -114,7 +117,7 @@ public class HttpClientDefaults {
      *
      * @return Maximum number of redirects until an error is returned.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.max-redirects", "trumpet.httpclient.max-redirects"})
+    @Config({"ness.httpclient.${httpclient_name}.max-redirects", "ness.httpclient.max-redirects"})
     @Default("5")
     public int getMaxRedirects()
     {
@@ -122,15 +125,15 @@ public class HttpClientDefaults {
     }
 
     /**
-     * Default is 'Trumpet HTTP Client'.
+     * Default is 'Ness HTTP Client'.
      *
      * @return Name of the user agent, used to identify to remote sites.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.user-agent", "trumpet.httpclient.user-agent"})
-    @Default("Trumpet HTTP Client")
+    @Config({"ness.httpclient.${httpclient_name}.user-agent", "ness.httpclient.user-agent"})
+    @Default("Ness HTTP Client")
     public String getUserAgent()
     {
-        return "Trumpet HTTP Client";
+        return "Ness HTTP Client";
     }
 
     /**
@@ -138,7 +141,7 @@ public class HttpClientDefaults {
      *
      * @return Maximum number of retries for a request.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.retries", "trumpet.httpclient.retries"})
+    @Config({"ness.httpclient.${httpclient_name}.retries", "ness.httpclient.retries"})
     @Default("3")
     public int getRetries()
     {
@@ -152,7 +155,7 @@ public class HttpClientDefaults {
      *
      * @return Location of the SSL truststore.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.ssl.truststore", "trumpet.httpclient.ssl.truststore"})
+    @Config({"ness.httpclient.${httpclient_name}.ssl.truststore", "ness.httpclient.ssl.truststore"})
     @Default("classpath:/default-truststore.jks")
     public String getSSLTruststore()
     {
@@ -165,7 +168,7 @@ public class HttpClientDefaults {
      *
      * @return Password for the SSL truststore.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.ssl.truststore.password", "trumpet.httpclient.ssl.truststore.password"})
+    @Config({"ness.httpclient.${httpclient_name}.ssl.truststore.password", "ness.httpclient.ssl.truststore.password"})
     @Default("changeit")
     public String getSSLTruststorePassword()
     {
@@ -178,7 +181,7 @@ public class HttpClientDefaults {
      * @return true if the client should fall back to default truststore if the custom truststore can
      *         not validate a request.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.ssl.truststore.fallback", "trumpet.httpclient.ssl.truststore.fallback"})
+    @Config({"ness.httpclient.${httpclient_name}.ssl.truststore.fallback", "ness.httpclient.ssl.truststore.fallback"})
     @Default("true")
     public boolean useSSLTruststoreFallback()
     {
@@ -191,7 +194,7 @@ public class HttpClientDefaults {
      *
      * @return keystore type for truststore.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.ssl.truststore.type", "trumpet.httpclient.ssl.truststore.type"})
+    @Config({"ness.httpclient.${httpclient_name}.ssl.truststore.type", "ness.httpclient.ssl.truststore.type"})
     @Default("JKS")
     public String getSSLTruststoreType()
     {
@@ -199,8 +202,8 @@ public class HttpClientDefaults {
     }
 
     @Config(
-        {"trumpet.httpclient.${httpclient_name}.ssl.server-cert-verification",
-            "trumpet.httpclient.ssl.server-cert-verification"})
+        {"ness.httpclient.${httpclient_name}.ssl.server-cert-verification",
+            "ness.httpclient.ssl.server-cert-verification"})
     @Default("true")
     public boolean useSSLServerCertVerification()
     {
@@ -214,7 +217,7 @@ public class HttpClientDefaults {
      *
      * @return Location of the SSL keystore.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.ssl.keystore", "trumpet.httpclient.ssl.keystore"})
+    @Config({"ness.httpclient.${httpclient_name}.ssl.keystore", "ness.httpclient.ssl.keystore"})
     @DefaultNull
     public String getSSLKeystore()
     {
@@ -226,7 +229,7 @@ public class HttpClientDefaults {
      *
      * @return Password for the SSL keystore.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.ssl.keystore.password", "trumpet.httpclient.ssl.keystore.password"})
+    @Config({"ness.httpclient.${httpclient_name}.ssl.keystore.password", "ness.httpclient.ssl.keystore.password"})
     @DefaultNull
     public String getSSLKeystorePassword()
     {
@@ -238,7 +241,7 @@ public class HttpClientDefaults {
      *
      * @return keystore type for keystore.
      */
-    @Config({"trumpet.httpclient.${httpclient_name}.ssl.keystore.type", "trumpet.httpclient.ssl.keystore.type"})
+    @Config({"ness.httpclient.${httpclient_name}.ssl.keystore.type", "ness.httpclient.ssl.keystore.type"})
     @Default("JKS")
     public String getSSLKeystoreType()
     {
