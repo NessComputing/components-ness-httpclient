@@ -27,9 +27,9 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Stage;
 import com.google.inject.name.Names;
+import com.nesscomputing.config.Config;
 import com.nesscomputing.config.ConfigModule;
 import com.nesscomputing.httpclient.HttpClient;
-import com.nesscomputing.httpclient.guice.HttpClientModule;
 import com.nesscomputing.lifecycle.Lifecycle;
 import com.nesscomputing.lifecycle.LifecycleStage;
 import com.nesscomputing.lifecycle.guice.LifecycleModule;
@@ -101,6 +101,93 @@ public class TestGuiceModule
         Assert.assertNotNull(runningHttpClient);
         Assert.assertFalse(testingHttpClient == runningHttpClient);
     }
+
+    @Test
+    public void testMultipleWithLifecycle()
+    {
+        final Config config = Config.getFixedConfig("trumpet.httpclient.user-agent", "default",
+                                                    "trumpet.httpclient.testing.user-agent", "testing",
+                                                    "trumpet.httpclient.running.user-agent", "running");
+
+        final Injector injector = Guice.createInjector(Stage.PRODUCTION,
+                                                       new ConfigModule(config),
+                                                       ENFORCEMENT_MODULE,
+                                                       new LifecycleModule(),
+                                                       new HttpClientModule("testing"),
+                                                       new HttpClientModule("running"));
+
+        final Lifecycle lifecycle = injector.getInstance(Lifecycle.class);
+
+        final HttpClient testingHttpClient = injector.getInstance(Key.get(HttpClient.class, Names.named("testing")));
+        final HttpClient runningHttpClient = injector.getInstance(Key.get(HttpClient.class, Names.named("running")));
+
+
+        Assert.assertNotNull(testingHttpClient);
+        Assert.assertNotNull(runningHttpClient);
+        Assert.assertFalse(testingHttpClient == runningHttpClient);
+
+        Assert.assertFalse(testingHttpClient.isStarted());
+        Assert.assertFalse(runningHttpClient.isStarted());
+        Assert.assertFalse(testingHttpClient.isStopped());
+        Assert.assertFalse(runningHttpClient.isStopped());
+
+        lifecycle.executeTo(LifecycleStage.START_STAGE);
+
+        Assert.assertTrue(testingHttpClient.isStarted());
+        Assert.assertTrue(runningHttpClient.isStarted());
+        Assert.assertFalse(testingHttpClient.isStopped());
+        Assert.assertFalse(runningHttpClient.isStopped());
+
+        lifecycle.executeTo(LifecycleStage.STOP_STAGE);
+
+        Assert.assertTrue(testingHttpClient.isStarted());
+        Assert.assertTrue(runningHttpClient.isStarted());
+        Assert.assertTrue(testingHttpClient.isStopped());
+        Assert.assertTrue(runningHttpClient.isStopped());
+    }
+
+    @Test
+    public void testMultipleWithLifecycleAndDefault()
+    {
+        final Config config = Config.getFixedConfig("trumpet.httpclient.user-agent", "default");
+
+        final Injector injector = Guice.createInjector(Stage.PRODUCTION,
+                                                       new ConfigModule(config),
+                                                       ENFORCEMENT_MODULE,
+                                                       new LifecycleModule(),
+                                                       new HttpClientModule(),
+                                                       new HttpClientModule("running"));
+
+        final Lifecycle lifecycle = injector.getInstance(Lifecycle.class);
+
+        final HttpClient defaultHttpClient = injector.getInstance(Key.get(HttpClient.class));
+        final HttpClient runningHttpClient = injector.getInstance(Key.get(HttpClient.class, Names.named("running")));
+
+
+        Assert.assertNotNull(defaultHttpClient);
+        Assert.assertNotNull(runningHttpClient);
+        Assert.assertFalse(defaultHttpClient == runningHttpClient);
+
+        Assert.assertFalse(defaultHttpClient.isStarted());
+        Assert.assertFalse(runningHttpClient.isStarted());
+        Assert.assertFalse(defaultHttpClient.isStopped());
+        Assert.assertFalse(runningHttpClient.isStopped());
+
+        lifecycle.executeTo(LifecycleStage.START_STAGE);
+
+        Assert.assertTrue(defaultHttpClient.isStarted());
+        Assert.assertTrue(runningHttpClient.isStarted());
+        Assert.assertFalse(defaultHttpClient.isStopped());
+        Assert.assertFalse(runningHttpClient.isStopped());
+
+        lifecycle.executeTo(LifecycleStage.STOP_STAGE);
+
+        Assert.assertTrue(defaultHttpClient.isStarted());
+        Assert.assertTrue(runningHttpClient.isStarted());
+        Assert.assertTrue(defaultHttpClient.isStopped());
+        Assert.assertTrue(runningHttpClient.isStopped());
+    }
+
 
     @Test
     public void testLifecycle() throws Exception

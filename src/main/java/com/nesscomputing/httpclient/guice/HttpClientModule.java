@@ -18,12 +18,12 @@ package com.nesscomputing.httpclient.guice;
 
 import java.lang.annotation.Annotation;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
@@ -35,6 +35,7 @@ import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.Multibinder;
+import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.nesscomputing.config.ConfigProvider;
 import com.nesscomputing.httpclient.HttpClient;
@@ -52,6 +53,9 @@ import com.nesscomputing.lifecycle.guice.LifecycleAction;
  */
 public class HttpClientModule extends AbstractModule
 {
+    public static final String DEFAULT_NAME = "default";
+    public static final Named DEFAULT_NAMED = Names.named(DEFAULT_NAME);
+
     private final String clientName;
 
     /**
@@ -60,35 +64,33 @@ public class HttpClientModule extends AbstractModule
      */
     public HttpClientModule()
     {
-        this.clientName = null;
+        this.clientName = DEFAULT_NAME;
     }
 
     /**
      * Bind an named HttpClient instance.
      * @param clientName The name to use. This can be used with the Named annotation in other parts of the code.
      */
-    public HttpClientModule(final String clientName)
+    public HttpClientModule(@Nonnull final String clientName)
     {
+        Preconditions.checkArgument(clientName != null, "client name can not be null");
+        Preconditions.checkArgument(!DEFAULT_NAME.equals(clientName), "client name can not be '%s'", DEFAULT_NAME);
+
         this.clientName = clientName;
     }
 
     @Override
     public void configure()
     {
-        final ImmutableMap<String, String> optionMap = ImmutableMap.of("httpclient_name", Objects.firstNonNull(clientName, "default"));
+        final Map<String, String> optionMap = Collections.singletonMap("httpclient_name", clientName);
+        final Annotation annotation = Names.named(clientName);
 
-        if (clientName != null) {
-            final Annotation annotation = Names.named(clientName);
+        bind(HttpClientDefaults.class).annotatedWith(annotation).toProvider(ConfigProvider.of(null, HttpClientDefaults.class, optionMap)).in(Scopes.SINGLETON);
+        bind(HttpClientFactory.class).annotatedWith(annotation).toProvider(new ApacheHttpClient4FactoryProvider(annotation)).in(Scopes.SINGLETON);
+        bind(HttpClient.class).annotatedWith(annotation).toProvider(new HttpClientProvider(annotation)).asEagerSingleton();
 
-            bind(HttpClientDefaults.class).annotatedWith(annotation).toProvider(ConfigProvider.of(null, HttpClientDefaults.class, optionMap)).in(Scopes.SINGLETON);
-            bind(HttpClientFactory.class).annotatedWith(annotation).toProvider(new ApacheHttpClient4FactoryProvider(clientName)).in(Scopes.SINGLETON);
-            bind(HttpClient.class).annotatedWith(annotation).toProvider(new HttpClientProvider(clientName)).asEagerSingleton();
-        }
-        else {
-            bind(HttpClientDefaults.class).toProvider(ConfigProvider.of(null, HttpClientDefaults.class, optionMap)).in(Scopes.SINGLETON);
-            bind(HttpClientFactory.class).toProvider(new ApacheHttpClient4FactoryProvider(clientName)).in(Scopes.SINGLETON);
-            // uses lifecycle, so bind eagerly to ensure it's registered itself by the time lifecycle runs
-            bind(HttpClient.class).toProvider(new HttpClientProvider(clientName)).asEagerSingleton();
+        if (clientName.equals(DEFAULT_NAME)) {
+            bind(HttpClient.class).toProvider(new HttpClientProvider(annotation)).asEagerSingleton();
         }
     }
 
@@ -120,9 +122,9 @@ public class HttpClientModule extends AbstractModule
 
         private final Annotation annotation;
 
-        HttpClientProvider(@Nullable final String clientName)
+        private HttpClientProvider(@Nonnull final Annotation annotation)
         {
-            this.annotation = clientName != null ? Names.named(clientName) : null;
+            this.annotation = annotation;
 
             addAction(LifecycleStage.START_STAGE, new LifecycleAction<HttpClient>() {
                 @Override
@@ -142,13 +144,8 @@ public class HttpClientModule extends AbstractModule
         @Inject
         public void setInjector(final Injector injector)
         {
-            if (annotation != null) {
-                this.httpClientDefaults = injector.getInstance(Key.get(HttpClientDefaults.class, annotation));
-                this.httpClientFactory = injector.getInstance(Key.get(HttpClientFactory.class, annotation));
-            } else {
-                this.httpClientDefaults = injector.getInstance(HttpClientDefaults.class);
-                this.httpClientFactory = injector.getInstance(HttpClientFactory.class);
-            }
+            this.httpClientDefaults = injector.getInstance(Key.get(HttpClientDefaults.class, annotation));
+            this.httpClientFactory = injector.getInstance(Key.get(HttpClientFactory.class, annotation));
         }
 
         @Override
@@ -166,25 +163,20 @@ public class HttpClientModule extends AbstractModule
         private HttpClientDefaults httpClientDefaults = null;
         private Set<HttpClientObserver> httpClientObservers = null;
 
-        ApacheHttpClient4FactoryProvider(@Nullable final String clientName)
+        private ApacheHttpClient4FactoryProvider(@Nonnull final Annotation annotation)
         {
-            this.annotation = clientName != null ? Names.named(clientName) : null;
+            this.annotation = annotation;
         }
 
         @Inject
-        public void setInjector(final Injector injector)
+        void setInjector(final Injector injector)
         {
             httpClientObservers = Sets.newHashSet();
 
             httpClientObservers.addAll(findObservers(injector, Key.get(OBSERVER_TYPE_LITERAL)));
+            httpClientObservers.addAll(findObservers(injector, Key.get(OBSERVER_TYPE_LITERAL, annotation)));
 
-            if (annotation != null) {
-                httpClientObservers.addAll(findObservers(injector, Key.get(OBSERVER_TYPE_LITERAL, annotation)));
-                httpClientDefaults = injector.getInstance(Key.get(HttpClientDefaults.class, annotation));
-            }
-            else {
-                httpClientDefaults = injector.getInstance(HttpClientDefaults.class);
-            }
+            httpClientDefaults = injector.getInstance(Key.get(HttpClientDefaults.class, annotation));
         }
 
         private Set<HttpClientObserver> findObservers(final Injector injector, final Key<Set<HttpClientObserver>> key)
