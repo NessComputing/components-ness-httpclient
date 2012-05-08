@@ -27,7 +27,7 @@ import org.apache.http.params.HttpParams;
  * outgoing request. This is used for internal requests that need to proxy the
  * auth cookies forward.
  */
-public class TrumpetCookieSpecFactory implements CookieSpecFactory
+public class NessCookieSpecFactory implements CookieSpecFactory
 {
     public static final String TRUMPET_COOKIE_POLICY = "trumpet";
 
