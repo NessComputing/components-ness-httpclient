@@ -93,12 +93,12 @@ public class TestAlwaysTrustServerSSLCert {
             }
 
             @Override
-            public boolean isSSLTruststoreFallback() {
+            public boolean useSSLTruststoreFallback() {
                 return false;
             }
 
             @Override
-            public boolean isSSLServerCertVerification() {
+            public boolean useSSLServerCertVerification() {
                 return isServerCertVerification;
             }
         };

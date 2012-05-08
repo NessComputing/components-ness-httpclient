@@ -62,7 +62,7 @@ public class TestFallbackManager {
 			}
 
 			@Override
-			public boolean isSSLTruststoreFallback() {
+			public boolean useSSLTruststoreFallback() {
 				return false;
 			}
 		};
@@ -94,7 +94,7 @@ public class TestFallbackManager {
 			}
 
 			@Override
-			public boolean isSSLTruststoreFallback() {
+			public boolean useSSLTruststoreFallback() {
 				return true;
 			}
 		};

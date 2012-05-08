@@ -164,7 +164,7 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
             LOG.trace("Using custom truststore at " + clientDefaults.getSSLTruststore());
             final MultiTrustManager multiTrustManager = new MultiTrustManager();
 
-            if (clientDefaults.isSSLTruststoreFallback()) {
+            if (clientDefaults.useSSLTruststoreFallback()) {
                 LOG.trace("Adding fallback to default trust manager");
                 multiTrustManager.addTrustManager(HttpClientTrustManagerFactory.getDefaultTrustManager());
             }
@@ -174,7 +174,7 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
             trustManager = multiTrustManager;
         }
 
-        if (!clientDefaults.isSSLServerCertVerification()) {
+        if (!clientDefaults.useSSLServerCertVerification()) {
             LOG.trace("Server cert checking disabled");
             trustManager = new AlwaysTrustServerTrustManager(trustManager);
         }

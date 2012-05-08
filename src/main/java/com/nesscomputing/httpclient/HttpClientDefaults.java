@@ -22,10 +22,6 @@ import org.skife.config.Default;
 import org.skife.config.DefaultNull;
 import org.skife.config.TimeSpan;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /** Default configuration bean for the HTTP client. Can be configured using config-magic. */
 public class HttpClientDefaults {
     /**
@@ -35,7 +31,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.total-connections-max", "trumpet.httpclient.total-connections-max"})
     @Default("200")
-    public int getTotalConnectionsMax() {
+    public int getTotalConnectionsMax()
+    {
         return 200;
     }
 
@@ -46,7 +43,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.perhost-connections-max", "trumpet.httpclient.perhost-connections-max"})
     @Default("20")
-    public int getPerHostConnectionsMax() {
+    public int getPerHostConnectionsMax()
+    {
         return 20;
     }
 
@@ -57,7 +55,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.connection-timeout", "trumpet.httpclient.connection-timeout"})
     @Default("60s")
-    public TimeSpan getConnectionTimeout() {
+    public TimeSpan getConnectionTimeout()
+    {
         return new TimeSpan(60, TimeUnit.SECONDS);
     }
 
@@ -68,7 +67,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.socket-timeout", "trumpet.httpclient.socket-timeout"})
     @Default("60s")
-    public TimeSpan getSocketTimeout() {
+    public TimeSpan getSocketTimeout()
+    {
         return new TimeSpan(60, TimeUnit.SECONDS);
     }
 
@@ -80,7 +80,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.idle-timeout", "trumpet.httpclient.idle-timeout"})
     @Default("15s")
-    public TimeSpan getIdleTimeout() {
+    public TimeSpan getIdleTimeout()
+    {
         return new TimeSpan(15, TimeUnit.SECONDS);
     }
 
@@ -91,7 +92,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.request-timeout", "trumpet.httpclient.request-timeout"})
     @Default("60s")
-    public TimeSpan getRequestTimeout() {
+    public TimeSpan getRequestTimeout()
+    {
         return new TimeSpan(60, TimeUnit.SECONDS);
     }
 
@@ -102,7 +104,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.follow-redirects", "trumpet.httpclient.follow-redirects"})
     @Default("true")
-    public boolean isFollowRedirects() {
+    public boolean isFollowRedirects()
+    {
         return true;
     }
 
@@ -113,7 +116,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.max-redirects", "trumpet.httpclient.max-redirects"})
     @Default("5")
-    public int getMaxRedirects() {
+    public int getMaxRedirects()
+    {
         return 5;
     }
 
@@ -124,7 +128,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.user-agent", "trumpet.httpclient.user-agent"})
     @Default("Trumpet HTTP Client")
-    public String getUserAgent() {
+    public String getUserAgent()
+    {
         return "Trumpet HTTP Client";
     }
 
@@ -135,7 +140,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.retries", "trumpet.httpclient.retries"})
     @Default("3")
-    public int getRetries() {
+    public int getRetries()
+    {
         return 3;
     }
 
@@ -148,8 +154,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.ssl.truststore", "trumpet.httpclient.ssl.truststore"})
     @Default("classpath:/default-truststore.jks")
-    @Nullable
-    public String getSSLTruststore() {
+    public String getSSLTruststore()
+    {
         return "classpath:/default-truststore.jks";
     }
 
@@ -161,8 +167,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.ssl.truststore.password", "trumpet.httpclient.ssl.truststore.password"})
     @Default("changeit")
-    @Nullable
-    public String getSSLTruststorePassword() {
+    public String getSSLTruststorePassword()
+    {
         return "changeit";
     }
 
@@ -174,7 +180,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.ssl.truststore.fallback", "trumpet.httpclient.ssl.truststore.fallback"})
     @Default("true")
-    public boolean isSSLTruststoreFallback() {
+    public boolean useSSLTruststoreFallback()
+    {
         return true;
     }
 
@@ -186,8 +193,8 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.ssl.truststore.type", "trumpet.httpclient.ssl.truststore.type"})
     @Default("JKS")
-    @Nonnull
-    public String getSSLTruststoreType() {
+    public String getSSLTruststoreType()
+    {
         return "JKS";
     }
 
@@ -195,7 +202,8 @@ public class HttpClientDefaults {
         {"trumpet.httpclient.${httpclient_name}.ssl.server-cert-verification",
             "trumpet.httpclient.ssl.server-cert-verification"})
     @Default("true")
-    public boolean isSSLServerCertVerification() {
+    public boolean useSSLServerCertVerification()
+    {
         return true;
     }
 
@@ -208,7 +216,6 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.ssl.keystore", "trumpet.httpclient.ssl.keystore"})
     @DefaultNull
-    @CheckForNull
     public String getSSLKeystore()
     {
         return null;
@@ -221,21 +228,20 @@ public class HttpClientDefaults {
      */
     @Config({"trumpet.httpclient.${httpclient_name}.ssl.keystore.password", "trumpet.httpclient.ssl.keystore.password"})
     @DefaultNull
-    @CheckForNull
-    public String getSSLKeystorePassword() {
+    public String getSSLKeystorePassword()
+    {
         return null;
     }
 
     /**
-     * Can be "JKS" or "PKCS12". Since keystores always have a key attached to a cert,
-     * PKCS12 works fine here (doesn't hit SunJSSE's PKCS12 bug).
+     * Can be "JKS" or "PKCS12".
      *
      * @return keystore type for keystore.
      */
     @Config({"trumpet.httpclient.${httpclient_name}.ssl.keystore.type", "trumpet.httpclient.ssl.keystore.type"})
-    @Default("PKCS12")
-    @Nonnull
-    public String getSSLKeystoreType() {
-        return "PKCS12";
+    @Default("JKS")
+    public String getSSLKeystoreType()
+    {
+        return "JKS";
     }
 }
