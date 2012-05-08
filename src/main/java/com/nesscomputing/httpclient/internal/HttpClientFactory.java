@@ -40,6 +40,16 @@ public interface HttpClientFactory
      */
 	void stop();
 
+	/**
+	 * True if the start() method was invoked successfully.
+	 */
+	boolean isStarted();
+
+    /**
+     * True if the stop() method was invoked successfully.
+     */
+	boolean isStopped();
+
     /**
      * @return a {@link HttpClientConnectionContext} object to modify settings for this factory.
      */

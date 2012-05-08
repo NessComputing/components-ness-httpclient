@@ -20,6 +20,9 @@ import java.io.Closeable;
 import java.net.URI;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
+import com.google.common.base.Preconditions;
 import com.nesscomputing.httpclient.factory.httpclient4.ApacheHttpClient4Factory;
 import com.nesscomputing.httpclient.internal.HttpClientFactory;
 import com.nesscomputing.httpclient.internal.HttpClientMethod;
@@ -74,8 +77,12 @@ public final class HttpClient implements Closeable
     /**
      * Creates a new HTTP Client.
      */
-    public HttpClient(final HttpClientFactory httpClientFactory, final HttpClientDefaults httpClientDefaults)
+    public HttpClient(@Nonnull final HttpClientFactory httpClientFactory,
+                      @Nonnull final HttpClientDefaults httpClientDefaults)
     {
+        Preconditions.checkArgument(httpClientFactory != null, "http client factory can not be null!");
+        Preconditions.checkArgument(httpClientDefaults != null, "http client defaults can not be null!");
+
         this.httpClientFactory = httpClientFactory;
         setDefaults(httpClientDefaults);
     }
@@ -91,6 +98,16 @@ public final class HttpClient implements Closeable
     {
         httpClientFactory.stop();
         return this;
+    }
+
+    public boolean isStarted()
+    {
+            return httpClientFactory.isStarted();
+    }
+
+    public boolean isStopped()
+    {
+            return httpClientFactory.isStopped();
     }
 
     /**

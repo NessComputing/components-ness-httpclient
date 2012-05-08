@@ -15,14 +15,6 @@
  */
 package com.nesscomputing.httpclient.testing;
 
-import com.nesscomputing.httpclient.HttpClient;
-import com.nesscomputing.httpclient.HttpClientConnectionContext;
-import com.nesscomputing.httpclient.HttpClientRequest;
-import com.nesscomputing.httpclient.internal.HttpClientBodySource;
-import com.nesscomputing.httpclient.internal.HttpClientFactory;
-import com.nesscomputing.httpclient.internal.HttpClientHeader;
-import com.nesscomputing.logging.Log;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +30,13 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
+import com.nesscomputing.httpclient.HttpClient;
+import com.nesscomputing.httpclient.HttpClientConnectionContext;
+import com.nesscomputing.httpclient.HttpClientRequest;
+import com.nesscomputing.httpclient.internal.HttpClientBodySource;
+import com.nesscomputing.httpclient.internal.HttpClientFactory;
+import com.nesscomputing.httpclient.internal.HttpClientHeader;
+import com.nesscomputing.logging.Log;
 
 /**
  * The actual dispatch logic behind a test {@link HttpClient}.  Implements request matching
@@ -47,6 +46,10 @@ import com.google.common.collect.ImmutableMap;
 @Immutable
 class TestingHttpClientFactory implements HttpClientFactory {
     private static final Log LOG = Log.findLog();
+
+    private volatile boolean started = false;
+    private volatile boolean stopped = false;
+
     private final HttpClientConnectionContext connectionContext = new TestingHttpClientConnectionContext();
     private final ImmutableMap<RequestMatcher, ResponseGenerator<?>> responseMap;
 
@@ -103,12 +106,29 @@ class TestingHttpClientFactory implements HttpClientFactory {
     }
 
     @Override
-    public void start() {
+    public void start()
+    {
+        started = true;
     }
 
     @Override
-    public void stop() {
+    public void stop()
+    {
+        stopped = true;
     }
+
+    @Override
+    public boolean isStarted()
+    {
+        return started;
+    }
+
+    @Override
+    public boolean isStopped()
+    {
+        return stopped;
+    }
+
 
     private static class TestingBodySource implements HttpClientBodySource {
         private final Object content;

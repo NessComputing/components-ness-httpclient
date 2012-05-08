@@ -231,6 +231,18 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
     }
 
     @Override
+    public boolean isStarted()
+    {
+        return started;
+    }
+
+    @Override
+    public boolean isStopped()
+    {
+        return stopped;
+    }
+
+    @Override
     public HttpClientConnectionContext getConnectionContext() {
         // Can be called even if the factory is not yet running.
         return connectionContext;
