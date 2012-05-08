@@ -41,11 +41,6 @@
         <level value="debug" />
     </logger>
 
-    <!-- silence the tons of log messages for all the unit tests from c3p0 start and stop -->
-    <logger name="com.mchange.v2.c3p0.impl">
-        <level value="warn" />
-    </logger>
-
     <root>
         <level value="info"/>
         <appender-ref ref="CONSOLE" />

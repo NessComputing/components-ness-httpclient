@@ -62,47 +62,39 @@ public class HttpClientRequest<T>
     private String contentEncoding = null;
     private List<HttpClientAuthProvider> authProviders = null;
 
-    private HttpClientRequest(final HttpClientFactory httpClientFactory, final HttpClientMethod httpMethod, final URI url, final HttpClientResponseHandler<T> httpHandler)
+    private HttpClientRequest(final HttpClientFactory httpClientFactory,
+                              final HttpClientMethod httpMethod,
+                              final URI url,
+                              final HttpClientResponseHandler<T> httpHandler,
+                              @Nonnull final List<HttpClientHeader> headers,
+                              @Nonnull final List<Cookie> cookies,
+                              @Nonnull final Map<String, Object> parameters,
+                              final String virtualHost,
+                              final int virtualPort,
+                              @Nonnull final List<HttpClientAuthProvider> authProviders,
+                              final Object content,
+                              final String contentType,
+                              final String contentEncoding)
     {
+        Preconditions.checkArgument(headers != null, "headers must not be null!");
+        Preconditions.checkArgument(cookies != null, "cookies must not be null!");
+        Preconditions.checkArgument(parameters != null, "parameters must not be null!");
+        Preconditions.checkArgument(authProviders != null, "authProviders must not be null!");
+
         this.httpClientFactory = httpClientFactory;
 
         this.httpMethod = httpMethod;
         this.url = url;
         this.httpHandler = httpHandler;
-    }
-
-    private void setHeaders(@Nonnull final List<HttpClientHeader> headers)
-    {
-        Preconditions.checkArgument(headers != null, "headers must not be null!");
         this.headers = Collections.unmodifiableList(headers);
-    }
-
-    private void setCookies(final List<Cookie> cookies)
-    {
-        Preconditions.checkArgument(cookies != null, "cookies must not be null!");
         this.cookies = Collections.unmodifiableList(cookies);
-    }
-
-    private void setParameters(final Map<String, Object> parameters)
-    {
-        Preconditions.checkArgument(parameters != null, "parameters must not be null!");
         this.parameters = Collections.unmodifiableMap(parameters);
-    }
 
-    private void setVirtualHost(final String virtualHost, final int virtualPort)
-    {
         this.virtualHost = virtualHost;
         this.virtualPort = virtualPort;
-    }
 
-    private void setAuthProviders(final List<HttpClientAuthProvider> authProviders)
-    {
-        Preconditions.checkArgument(authProviders != null, "authProviders must not be null!");
         this.authProviders = Collections.unmodifiableList(authProviders);
-    }
 
-    private void setContent(final Object content, final String contentType, final String contentEncoding)
-    {
         this.content = content;
         this.contentType = contentType;
         this.contentEncoding = contentEncoding;
@@ -253,7 +245,7 @@ public class HttpClientRequest<T>
         private final HttpClientResponseHandler<Type> httpHandler;
 
         private URI url;
-        private HttpClientMethod httpMethod;
+        private final HttpClientMethod httpMethod;
         private String virtualHost;
         private int virtualPort;
 
@@ -487,14 +479,20 @@ public class HttpClientRequest<T>
          */
         public HttpClientRequest<Type> request()
         {
-            final HttpClientRequest<Type> httpClientRequest = new HttpClientRequest<Type>(httpClientFactory, httpMethod, url, httpHandler);
-
-            httpClientRequest.setHeaders(headers);
-            httpClientRequest.setCookies(cookies);
-            httpClientRequest.setParameters(parameters);
-            httpClientRequest.setVirtualHost(virtualHost, virtualPort);
-            httpClientRequest.setContent(content, contentType, contentEncoding);
-            httpClientRequest.setAuthProviders(authProviders);
+            final HttpClientRequest<Type> httpClientRequest = new HttpClientRequest<Type>(
+                            httpClientFactory,
+                            httpMethod,
+                            url,
+                            httpHandler,
+                            headers,
+                            cookies,
+                            parameters,
+                            virtualHost,
+                            virtualPort,
+                            authProviders,
+                            content,
+                            contentType,
+                            contentEncoding);
 
             return httpClientRequest;
         }
