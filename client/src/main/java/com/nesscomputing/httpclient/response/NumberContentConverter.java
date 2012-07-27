@@ -107,7 +107,7 @@ public class NumberContentConverter<T extends Number> extends AbstractErrorHandl
                 // FALL THROUGH
 
             default:
-                LOG.warn("Remote service responsed with %d code (cause: %s)", responseCode, httpClientResponse.getStatusText());
+                LOG.warn("Remote service responded to \"%s\" with code %d (cause: %s)", httpClientResponse.getUri(), responseCode, httpClientResponse.getStatusText());
                 throw new HttpResponseException(httpClientResponse);
         }
     }
