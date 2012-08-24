@@ -120,6 +120,11 @@ public class HttpClientRequest<T>
         return httpBodySource.getContent();
     }
 
+    public String getContentType()
+    {
+        return contentType;
+    }
+
     /**
      * @return the HTTP method for this request.
      */
@@ -218,11 +223,6 @@ public class HttpClientRequest<T>
     private Object getContentObject()
     {
         return content;
-    }
-
-    private String getContentType()
-    {
-        return contentType;
     }
 
     private String getContentEncoding()
