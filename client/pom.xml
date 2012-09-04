@@ -9,7 +9,6 @@
     <version>1.1.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>com.nesscomputing.components</groupId>
   <artifactId>ness-httpclient</artifactId>
   <name>ness-httpclient</name>
   <packaging>jar</packaging>
@@ -84,12 +83,12 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.skife.config</groupId>
       <artifactId>config-magic</artifactId>
@@ -106,7 +105,7 @@
       <artifactId>jackson-core-asl</artifactId>
       <optional>true</optional>
     </dependency>
-    
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit-dep</artifactId>
