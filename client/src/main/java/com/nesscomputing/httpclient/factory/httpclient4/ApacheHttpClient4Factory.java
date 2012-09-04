@@ -35,6 +35,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.Cookie;
 
+import com.google.common.base.Preconditions;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
@@ -71,7 +73,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
-import com.google.common.base.Preconditions;
 import com.nesscomputing.httpclient.HttpClientAuthProvider;
 import com.nesscomputing.httpclient.HttpClientConnectionContext;
 import com.nesscomputing.httpclient.HttpClientDefaults;
@@ -364,7 +365,7 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
 
         contributeCookies(httpClient, httpClientRequest);
 
-        contributeParameters(httpClient, httpClientRequest);
+        contributeParameters(httpClient, httpRequest, httpClientRequest);
 
         contributeHeaders(httpRequest, httpClientRequest);
 
@@ -450,15 +451,18 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
     }
 
     private <T> void contributeParameters(final DefaultHttpClient httpClient,
+                                          final HttpRequestBase httpRequest,
                                           final HttpClientRequest<T> httpClientRequest)
     {
         final Map<String, Object> parameters = httpClientRequest.getParameters();
 
         if (parameters != null && parameters.size() > 0) {
-            HttpParams params = httpClient.getParams();
+            HttpParams clientParams = httpClient.getParams();
+            HttpParams requestParams = httpRequest.getParams();
 
             for (Map.Entry<String, Object> entry: parameters.entrySet()) {
-                params.setParameter(entry.getKey(), entry.getValue());
+                clientParams.setParameter(entry.getKey(), entry.getValue());
+                requestParams.setParameter(entry.getKey(), entry.getValue());
             }
         }
     }

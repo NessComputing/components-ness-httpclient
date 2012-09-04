@@ -15,10 +15,14 @@
  */
 package com.nesscomputing.httpclient.factory.httpclient4;
 
+import org.apache.http.cookie.ClientCookie;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.cookie.CookieAttributeHandler;
 import org.apache.http.cookie.CookieOrigin;
 import org.apache.http.cookie.CookieSpec;
 import org.apache.http.cookie.CookieSpecFactory;
+import org.apache.http.cookie.MalformedCookieException;
+import org.apache.http.cookie.SetCookie;
 import org.apache.http.impl.cookie.BrowserCompatSpec;
 import org.apache.http.params.HttpParams;
 
@@ -42,10 +46,39 @@ public class NessCookieSpecFactory implements CookieSpecFactory
         TrumpetCookieSpec()
         {
             super();
+
+            registerAttribHandler(ClientCookie.DOMAIN_ATTR, new NessDomainHandler());
+
         }
 
         @Override
-        public boolean match(final Cookie cookie, final CookieOrigin origin) {
+        public String toString()
+        {
+            return NESS_COOKIE_POLICY;
+        }
+
+    }
+
+    public static class NessDomainHandler implements CookieAttributeHandler
+    {
+        public void parse(final SetCookie cookie, final String value)
+            throws MalformedCookieException
+        {
+            if (cookie == null) {
+                throw new IllegalArgumentException("Cookie may not be null");
+            }
+            if (value == null) {
+                throw new MalformedCookieException("Missing value for domain attribute");
+            }
+            if (value.trim().length() == 0) {
+                throw new MalformedCookieException("Blank value for domain attribute");
+            }
+            cookie.setDomain(value);
+        }
+
+        public void validate(final Cookie cookie, final CookieOrigin origin)
+            throws MalformedCookieException
+        {
             if (cookie == null) {
                 throw new IllegalArgumentException("Cookie may not be null");
             }
@@ -53,7 +86,19 @@ public class NessCookieSpecFactory implements CookieSpecFactory
                 throw new IllegalArgumentException("Cookie origin may not be null");
             }
 
-            // Don't reject any cookie. Anything goes.
+            // Everything else is allowed.
+        }
+
+        public boolean match(final Cookie cookie, final CookieOrigin origin)
+        {
+            if (cookie == null) {
+                throw new IllegalArgumentException("Cookie may not be null");
+            }
+            if (origin == null) {
+                throw new IllegalArgumentException("Cookie origin may not be null");
+            }
+
+            // Everything matches.
             return true;
         }
     }
