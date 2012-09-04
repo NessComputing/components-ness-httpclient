@@ -9,7 +9,6 @@
     <version>1.1.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>com.nesscomputing.components</groupId>
   <artifactId>ness-httpclient-testing</artifactId>
   <name>ness-httpclient-testing</name>
   <packaging>jar</packaging>
