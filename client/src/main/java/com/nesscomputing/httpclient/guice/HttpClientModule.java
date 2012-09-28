@@ -160,8 +160,7 @@ public class HttpClientModule extends AbstractModule
         private static final TypeLiteral<Set<HttpClientObserver>> OBSERVER_TYPE_LITERAL = new TypeLiteral<Set<HttpClientObserver>>() {};
         private final Annotation annotation;
 
-        private HttpClientDefaults httpClientDefaults = null;
-        private Set<HttpClientObserver> httpClientObservers = null;
+        private Injector injector;
 
         private ApacheHttpClient4FactoryProvider(@Nonnull final Annotation annotation)
         {
@@ -171,12 +170,7 @@ public class HttpClientModule extends AbstractModule
         @Inject
         void setInjector(final Injector injector)
         {
-            httpClientObservers = Sets.newHashSet();
-
-            httpClientObservers.addAll(findObservers(injector, Key.get(OBSERVER_TYPE_LITERAL)));
-            httpClientObservers.addAll(findObservers(injector, Key.get(OBSERVER_TYPE_LITERAL, annotation)));
-
-            httpClientDefaults = injector.getInstance(Key.get(HttpClientDefaults.class, annotation));
+            this.injector = injector;
         }
 
         private Set<HttpClientObserver> findObservers(final Injector injector, final Key<Set<HttpClientObserver>> key)
@@ -192,6 +186,11 @@ public class HttpClientModule extends AbstractModule
         @Override
         public HttpClientFactory get()
         {
+            final Set<HttpClientObserver> httpClientObservers = Sets.union(
+                    findObservers(injector, Key.get(OBSERVER_TYPE_LITERAL)),
+                    findObservers(injector, Key.get(OBSERVER_TYPE_LITERAL, annotation)));
+
+            final HttpClientDefaults httpClientDefaults = injector.getInstance(Key.get(HttpClientDefaults.class, annotation));
             return new ApacheHttpClient4Factory(httpClientDefaults, httpClientObservers);
         }
     }
