@@ -170,6 +170,25 @@ public class TestVariousThings
         Assert.assertThat(cookies[0].getValue(), equalTo(cookie.getValue()));
     }
 
+    @Test
+    public void testFollowRedirects() throws IOException
+    {
+        final String baseUri = "http://" + localHttpService.getHost() + ":" + localHttpService.getPort();
+        testHandler.addHeader("Location", baseUri + "/foo");
+
+        testHandler.setNextStatus(302);
+        httpClient.get(baseUri, new ContentResponseHandler<String>(new StringResponseConverter(200))).perform();
+        Assert.assertThat(testHandler.getRequestURI(), is("/foo"));
+
+        testHandler.setNextStatus(302);
+        httpClient.get(baseUri, new ContentResponseHandler<String>(new StringResponseConverter(200))).followRedirects(true).perform();
+        Assert.assertThat(testHandler.getRequestURI(), is("/foo"));
+
+        testHandler.setNextStatus(302);
+        httpClient.get(baseUri, new ContentResponseHandler<String>(new StringResponseConverter(302))).followRedirects(false).perform();
+        Assert.assertThat(testHandler.getRequestURI(), is("/"));
+    }
+
     @Test(expected=IOException.class)
     public void testResponseExplodes() throws IOException
     {

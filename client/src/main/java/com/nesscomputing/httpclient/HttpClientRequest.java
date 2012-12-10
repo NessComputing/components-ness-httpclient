@@ -60,6 +60,7 @@ public class HttpClientRequest<T>
     private Object content = null;
     private String contentType = null;
     private String contentEncoding = null;
+    private Boolean followRedirects = null;
     private List<HttpClientAuthProvider> authProviders = null;
 
     private HttpClientRequest(final HttpClientFactory httpClientFactory,
@@ -74,7 +75,8 @@ public class HttpClientRequest<T>
                               @Nonnull final List<HttpClientAuthProvider> authProviders,
                               final Object content,
                               final String contentType,
-                              final String contentEncoding)
+                              final String contentEncoding,
+                              final Boolean followRedirects)
     {
         Preconditions.checkArgument(headers != null, "headers must not be null!");
         Preconditions.checkArgument(cookies != null, "cookies must not be null!");
@@ -98,6 +100,8 @@ public class HttpClientRequest<T>
         this.content = content;
         this.contentType = contentType;
         this.contentEncoding = contentEncoding;
+
+        this.followRedirects = followRedirects;
 
         if (content != null) {
             httpBodySource = httpClientFactory.getHttpBodySourceFor(content);
@@ -203,6 +207,14 @@ public class HttpClientRequest<T>
     }
 
     /**
+     * @return true if redirects should be followed automatically.
+     */
+    public Boolean followRedirects()
+    {
+        return followRedirects;
+    }
+
+    /**
      * Execute the HTTP request and return the result.
      */
     public T perform()
@@ -253,6 +265,8 @@ public class HttpClientRequest<T>
         private String contentType;
         private String contentEncoding;
 
+        private Boolean followRedirects;
+
         private final List<HttpClientAuthProvider> authProviders = Lists.newArrayList();
 
         public static <T> Builder<T> fromRequest(final HttpClientRequest<T> request)
@@ -282,6 +296,7 @@ public class HttpClientRequest<T>
             this.content = request.getContentObject();
             this.contentType = request.getContentType();
             this.contentEncoding = request.getContentEncoding();
+            this.followRedirects = request.followRedirects();
         }
 
         public Builder<Type> setUrl(final URI url)
@@ -475,6 +490,15 @@ public class HttpClientRequest<T>
         }
 
         /**
+         * @param followRedirects true if redirects should be followed automatically.
+         */
+        public Builder<Type> followRedirects(final Boolean followRedirects)
+        {
+            this.followRedirects = followRedirects;
+            return this;
+        }
+
+        /**
          * Create a HttpClientRequest from the builder. The object is disconnected from the builder and the builder can be reused.
          */
         public HttpClientRequest<Type> request()
@@ -492,7 +516,8 @@ public class HttpClientRequest<T>
                             authProviders,
                             content,
                             contentType,
-                            contentEncoding);
+                            contentEncoding,
+                            followRedirects);
 
             return httpClientRequest;
         }

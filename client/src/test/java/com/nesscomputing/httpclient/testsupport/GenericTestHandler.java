@@ -44,6 +44,8 @@ public class GenericTestHandler extends AbstractHandler
     private Cookie [] cookies = null;
 
     private String method = null;
+    private String requestURI = null;
+    private int status = HttpServletResponse.SC_OK;
 
     private List<HttpClientHeader> headers = new ArrayList<HttpClientHeader>();
 
@@ -57,8 +59,11 @@ public class GenericTestHandler extends AbstractHandler
     {
         method = request.getMethod();
 
+        requestURI = request.getRequestURI();
+
         httpResponse.setContentType(contentType);
-        httpResponse.setStatus(HttpServletResponse.SC_OK);
+        httpResponse.setStatus(status);
+        status = HttpServletResponse.SC_OK;
 
         for (final HttpClientHeader header: headers) {
             httpResponse.addHeader(header.getName(), header.getValue());
@@ -97,6 +102,15 @@ public class GenericTestHandler extends AbstractHandler
         this.content = content;
     }
 
+    /*
+     * @param status The next response code to be returned by a request.
+     * When the next status hasn't been set, a 200 will be returned.
+     */
+    public void setNextStatus(final int status)
+    {
+        this.status = status;
+    }
+
     public void addHeader(final String name, final String value)
     {
         headers.add(new HttpClientHeader(name, value));
@@ -120,6 +134,11 @@ public class GenericTestHandler extends AbstractHandler
     public List<HttpClientHeader> getHeaders(final String name)
     {
         return reqHeaders.get(name);
+    }
+
+    public String getRequestURI()
+    {
+        return requestURI;
     }
 
     public String getMethod()
