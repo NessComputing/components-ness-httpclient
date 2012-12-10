@@ -359,7 +359,7 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
 
     private <T> T executeRequest(final HttpRequestBase httpRequest,
         final HttpClientRequest<T> httpClientRequest) throws IOException {
-        final DefaultHttpClient httpClient = new DefaultHttpClient(connectionManager, params);
+        final DefaultHttpClient httpClient = new DefaultHttpClient(connectionManager, setFollowRedirects(params, httpClientRequest));
         httpClient.getCookieSpecs().register(NessCookieSpecFactory.NESS_COOKIE_POLICY, new NessCookieSpecFactory());
         httpClient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(retries, false));
 
@@ -506,6 +506,15 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
         if (CollectionUtils.isNotEmpty(authProviders)) {
             httpClient.setCredentialsProvider(new InternalCredentialsProvider(authProviders));
         }
+    }
+
+    private <T> HttpParams setFollowRedirects(final HttpParams params,
+        final HttpClientRequest<T> httpClientRequest) {
+        Boolean followRedirects = httpClientRequest.followRedirects();
+        if (followRedirects != null) {
+            return params.copy().setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, followRedirects);
+        }
+        return params;
     }
 
     private class InternalConnectionContext implements HttpClientConnectionContext {
