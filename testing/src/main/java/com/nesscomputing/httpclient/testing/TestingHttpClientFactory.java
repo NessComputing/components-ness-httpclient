@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.concurrent.Immutable;
@@ -30,9 +31,13 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+
 import com.nesscomputing.httpclient.HttpClient;
 import com.nesscomputing.httpclient.HttpClientConnectionContext;
+import com.nesscomputing.httpclient.HttpClientObserver;
 import com.nesscomputing.httpclient.HttpClientRequest;
+import com.nesscomputing.httpclient.HttpClientResponse;
 import com.nesscomputing.httpclient.internal.HttpClientBodySource;
 import com.nesscomputing.httpclient.internal.HttpClientFactory;
 import com.nesscomputing.httpclient.internal.HttpClientHeader;
@@ -52,9 +57,11 @@ class TestingHttpClientFactory implements HttpClientFactory {
 
     private final HttpClientConnectionContext connectionContext = new TestingHttpClientConnectionContext();
     private final ImmutableMap<RequestMatcher, ResponseGenerator<?>> responseMap;
+    private final Set<HttpClientObserver> observers;
 
-    TestingHttpClientFactory(ImmutableMap<RequestMatcher, ResponseGenerator<?>> responseMap) {
-        LOG.trace("Initializing testing http client... map = %s", responseMap);
+    TestingHttpClientFactory(ImmutableMap<RequestMatcher, ResponseGenerator<?>> responseMap, Set<HttpClientObserver> observers) {
+        LOG.trace("Initializing testing http client... map = %s, observers = %s", responseMap, observers);
+        this.observers = ImmutableSet.copyOf(observers);
         this.responseMap = responseMap;
     }
 
@@ -72,8 +79,13 @@ class TestingHttpClientFactory implements HttpClientFactory {
     @Override
     public <T> T performRequest(HttpClientRequest<T> request) throws IOException {
         LOG.trace("Processing request %s", request);
+
+        for (final HttpClientObserver observer : observers) {
+            request = observer.onRequestSubmitted(request);
+        }
+
         ResponseGenerator responseGenerator = null;
-        for (Entry<RequestMatcher, ResponseGenerator<?>> e : responseMap.entrySet()) {
+        for (final Entry<RequestMatcher, ResponseGenerator<?>> e : responseMap.entrySet()) {
             if (e.getKey().apply(request)) {
                 responseGenerator = e.getValue();
                 break;
@@ -83,16 +95,22 @@ class TestingHttpClientFactory implements HttpClientFactory {
             throw new IllegalStateException("No response matcher found for request " + request);
         }
         LOG.trace("Picked responder %s", responseGenerator);
-        HttpClientBodySource httpBodySource = request.getHttpBodySource();
+        final HttpClientBodySource httpBodySource = request.getHttpBodySource();
         if (httpBodySource != null) {
             httpBodySource.setContentType(getHeader(request, "Content-Type"));
             httpBodySource.setContentEncoding(getHeader(request, "Content-Encoding"));
         }
-        return request.getHttpHandler().handle(responseGenerator.respondTo(request));
+        HttpClientResponse response = responseGenerator.respondTo(request);
+
+        for (final HttpClientObserver observer : observers) {
+            response = observer.onResponseReceived(response);
+        }
+
+        return request.getHttpHandler().handle(response);
     }
 
     private String getHeader(HttpClientRequest<?> request, final String header) {
-        Collection<HttpClientHeader> candidates = Collections2.filter(request.getHeaders(), new Predicate<HttpClientHeader>() {
+        final Collection<HttpClientHeader> candidates = Collections2.filter(request.getHeaders(), new Predicate<HttpClientHeader>() {
             @Override
             public boolean apply(HttpClientHeader h) {
                 return h.getName().equals(header);

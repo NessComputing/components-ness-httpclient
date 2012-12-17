@@ -17,6 +17,8 @@ package com.nesscomputing.httpclient.testing;
 
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -28,6 +30,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.nesscomputing.httpclient.HttpClient;
+import com.nesscomputing.httpclient.HttpClientObserver;
 import com.nesscomputing.httpclient.internal.HttpClientMethod;
 
 /**
@@ -70,6 +73,7 @@ public class TestingHttpClientBuilder {
      * May be injected or directly set via {@link #withObjectMapper(ObjectMapper)}
      */
     private ObjectMapper mapper;
+    private final Set<HttpClientObserver> observers = new HashSet<>();
 
     public TestingHttpClientBuilder() { }
 
@@ -95,7 +99,7 @@ public class TestingHttpClientBuilder {
      * if and only if all provided request matchers and response generators are.
      */
     public HttpClient build() {
-        return new HttpClient(new TestingHttpClientFactory(requestMap.build()));
+        return new HttpClient(new TestingHttpClientFactory(requestMap.build(), observers));
     }
 
     /**
@@ -145,4 +149,9 @@ public class TestingHttpClientBuilder {
         };
     }
 
+    public TestingHttpClientBuilder withObserver(HttpClientObserver observer)
+    {
+        observers.add(observer);
+        return this;
+    }
 }
