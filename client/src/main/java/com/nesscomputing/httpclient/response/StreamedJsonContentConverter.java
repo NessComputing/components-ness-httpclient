@@ -19,14 +19,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Objects;
 import com.google.common.base.Throwables;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonToken;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
 import com.nesscomputing.callback.Callback;
 import com.nesscomputing.callback.CallbackRefusedException;
@@ -89,7 +88,7 @@ public class StreamedJsonContentConverter<T> extends AbstractErrorHandlingConten
             return null;
 
         case 200:
-            final JsonParser jp = mapper.getJsonFactory().createJsonParser(inputStream);
+            final JsonParser jp = mapper.getFactory().createJsonParser(inputStream);
             try {
                 expect(jp, jp.nextToken(), JsonToken.START_OBJECT);
                 expect(jp, jp.nextToken(), JsonToken.FIELD_NAME);

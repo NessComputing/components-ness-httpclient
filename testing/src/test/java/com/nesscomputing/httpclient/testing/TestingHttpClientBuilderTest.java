@@ -35,23 +35,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
 import com.nesscomputing.httpclient.HttpClient;
 import com.nesscomputing.httpclient.HttpClientRequest;
 import com.nesscomputing.httpclient.HttpClientResponse;
 import com.nesscomputing.httpclient.internal.HttpClientBodySource;
 import com.nesscomputing.httpclient.internal.HttpClientMethod;
-import com.nesscomputing.httpclient.testing.CapturingHttpResponseHandler;
-import com.nesscomputing.httpclient.testing.JaxRsResponseHttpResponseGenerator;
-import com.nesscomputing.httpclient.testing.RequestMatcher;
-import com.nesscomputing.httpclient.testing.ResponseGenerator;
-import com.nesscomputing.httpclient.testing.TestingHttpClientBuilder;
 
 /**
  * This pretty well doubles as an example use case of the {@link TestingHttpClientBuilder}.

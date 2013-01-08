@@ -15,15 +15,15 @@
  */
 package com.nesscomputing.httpclient.response;
 
-import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.logging.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.nesscomputing.httpclient.HttpClientResponse;
+import com.nesscomputing.logging.Log;
 
 public class JsonContentConverter<T> extends AbstractErrorHandlingContentConverter<T>
 {
