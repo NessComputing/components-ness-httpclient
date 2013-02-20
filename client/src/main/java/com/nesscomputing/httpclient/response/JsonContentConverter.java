@@ -97,8 +97,7 @@ public class JsonContentConverter<T> extends AbstractErrorHandlingContentConvert
                 }
             // FALL THROUGH
             default:
-                LOG.warn("Remote service responded to \"%s\" with code %d (cause: %s)", httpClientResponse.getUri(), responseCode, httpClientResponse.getStatusText());
-                throw new HttpResponseException(httpClientResponse);
+                throw throwHttpResponseException(httpClientResponse);
         }
     }
 }

@@ -16,8 +16,6 @@
 package com.nesscomputing.httpclient.response;
 
 import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.logging.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -36,8 +34,6 @@ public class Valid2xxContentConverter extends AbstractErrorHandlingContentConver
     public static final ContentResponseHandler<Boolean> DEFAULT_RESPONSE_HANDLER = ContentResponseHandler.forConverter(DEFAULT_CONVERTER);
     public static final ContentResponseHandler<Boolean> DEFAULT_FAILING_RESPONSE_HANDLER = ContentResponseHandler.forConverter(DEFAULT_FAILING_CONVERTER);
     public static final ContentResponseHandler<Boolean> DEFAULT_404OK_RESPONSE_HANDLER = ContentResponseHandler.forConverter(DEFAULT_404OK_CONVERTER);
-
-    private static final Log LOG = Log.findLog();
 
     private final boolean failOnError;
     private final boolean ignore404;
@@ -70,8 +66,7 @@ public class Valid2xxContentConverter extends AbstractErrorHandlingContentConver
                 // FALL THROUGH
             default:
                 if (failOnError) {
-                    LOG.warn("Remote service responded to \"%s\" with code %d (cause: %s)", httpClientResponse.getUri(), responseCode, httpClientResponse.getStatusText());
-                    throw new HttpResponseException(httpClientResponse);
+                    throw throwHttpResponseException(httpClientResponse);
                 }
                 else {
                     return Boolean.FALSE;
