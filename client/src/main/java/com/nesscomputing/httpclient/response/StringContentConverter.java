@@ -16,8 +16,6 @@
 package com.nesscomputing.httpclient.response;
 
 import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.logging.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,8 +38,6 @@ public class StringContentConverter extends AbstractErrorHandlingContentConverte
 
     public static final ContentResponseHandler<String> DEFAULT_RESPONSE_HANDLER = ContentResponseHandler.forConverter(DEFAULT_CONVERTER);
     public static final ContentResponseHandler<String> DEFAULT_404OK_RESPONSE_HANDLER = ContentResponseHandler.forConverter(DEFAULT_404OK_CONVERTER);
-
-    private static final Log LOG = Log.findLog();
 
     private final boolean ignore404;
 
@@ -83,8 +79,7 @@ public class StringContentConverter extends AbstractErrorHandlingContentConverte
                 // FALL THROUGH
 
             default:
-                LOG.warn("Remote service responded to \"%s\" with code %d (cause: %s)", httpClientResponse.getUri(), responseCode, httpClientResponse.getStatusText());
-                throw new HttpResponseException(httpClientResponse);
+                throw throwHttpResponseException(httpClientResponse);
         }
     }
 }

@@ -124,9 +124,7 @@ public class StreamedJsonContentConverter<T> extends AbstractErrorHandlingConten
             }
 
         default:
-            throw new IOException(String.format("Status code %d for \"%s\"",
-                                                response.getStatusCode(),
-                                                response.getUri()));
+            throw throwHttpResponseException(response);
         }
     }
 
