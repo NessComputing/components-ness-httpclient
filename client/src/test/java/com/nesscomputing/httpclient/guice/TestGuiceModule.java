@@ -51,9 +51,9 @@ public class TestGuiceModule
                                                        ConfigModule.forTesting(),
                                                        ENFORCEMENT_MODULE,
                                                        new LifecycleModule(),
-                                                       new HttpClientModule());
+                                                       new HttpClientModule("test"));
 
-        final HttpClient httpClient = injector.getInstance(HttpClient.class);
+        final HttpClient httpClient = injector.getInstance(Key.get(HttpClient.class, Names.named("test")));
 
         Assert.assertNotNull(httpClient);
     }
@@ -65,7 +65,7 @@ public class TestGuiceModule
                                                        ConfigModule.forTesting(),
                                                        ENFORCEMENT_MODULE,
                                                        new LifecycleModule(),
-                                                       new HttpClientModule());
+                                                       new HttpClientModule("test"));
 
         injector.getInstance(Key.get(HttpClient.class, Names.named("_some_strange_thing")));
     }
@@ -155,12 +155,12 @@ public class TestGuiceModule
                                                        new ConfigModule(config),
                                                        ENFORCEMENT_MODULE,
                                                        new LifecycleModule(),
-                                                       new HttpClientModule(),
+                                                       new HttpClientModule("test"),
                                                        new HttpClientModule("running"));
 
         final Lifecycle lifecycle = injector.getInstance(Lifecycle.class);
 
-        final HttpClient defaultHttpClient = injector.getInstance(Key.get(HttpClient.class));
+        final HttpClient defaultHttpClient = injector.getInstance(Key.get(HttpClient.class, Names.named("test")));
         final HttpClient runningHttpClient = injector.getInstance(Key.get(HttpClient.class, Names.named("running")));
 
 

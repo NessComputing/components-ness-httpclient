@@ -58,6 +58,7 @@ public class TestObserverExtension {
     private static final Log LOG = Log.findLog();
     private LocalHttpService localHttpService = null;
     @Inject
+    @Named("test")
     private HttpClient httpClient = null;
     @Inject
     private Lifecycle lifecycle;
@@ -79,7 +80,7 @@ public class TestObserverExtension {
                 binder().disableCircularProxies();
                 install (ConfigModule.forTesting());
                 install (new LifecycleModule());
-                install (new HttpClientModule());
+                install (new HttpClientModule("test"));
                 HttpClientModule.bindNewObserver(binder()).toInstance(new MyObserver());
             }
         }).injectMembers(this);

@@ -35,8 +35,8 @@ import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.Multibinder;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+
 import com.nesscomputing.config.ConfigProvider;
 import com.nesscomputing.httpclient.HttpClient;
 import com.nesscomputing.httpclient.HttpClientDefaults;
@@ -53,19 +53,7 @@ import com.nesscomputing.lifecycle.guice.LifecycleAction;
  */
 public class HttpClientModule extends AbstractModule
 {
-    public static final String DEFAULT_NAME = "default";
-    public static final Named DEFAULT_NAMED = Names.named(DEFAULT_NAME);
-
     private final String clientName;
-
-    /**
-     * Bind an anonymous, unannotated HttpClient.  Guice 3.0 actually seems to get it right that this is not
-     * exposed for arbitrary requests with annotations.
-     */
-    public HttpClientModule()
-    {
-        this.clientName = DEFAULT_NAME;
-    }
 
     /**
      * Bind an named HttpClient instance.
@@ -74,7 +62,6 @@ public class HttpClientModule extends AbstractModule
     public HttpClientModule(@Nonnull final String clientName)
     {
         Preconditions.checkArgument(clientName != null, "client name can not be null");
-        Preconditions.checkArgument(!DEFAULT_NAME.equals(clientName), "client name can not be '%s'", DEFAULT_NAME);
 
         this.clientName = clientName;
     }
@@ -88,10 +75,6 @@ public class HttpClientModule extends AbstractModule
         bind(HttpClientDefaults.class).annotatedWith(annotation).toProvider(ConfigProvider.of(null, HttpClientDefaults.class, optionMap)).in(Scopes.SINGLETON);
         bind(HttpClientFactory.class).annotatedWith(annotation).toProvider(new ApacheHttpClient4FactoryProvider(annotation)).in(Scopes.SINGLETON);
         bind(HttpClient.class).annotatedWith(annotation).toProvider(new HttpClientProvider(annotation)).asEagerSingleton();
-
-        if (clientName.equals(DEFAULT_NAME)) {
-            bind(HttpClient.class).toProvider(new HttpClientProvider(annotation)).asEagerSingleton();
-        }
     }
 
     /**
