@@ -203,6 +203,14 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
 
     }
 
+    /**
+     * Expose the observer set.  Only for testing.
+     */
+    protected Set<? extends HttpClientObserver> getHttpClientObservers()
+    {
+        return httpClientObservers;
+    }
+
     @Override
     public void start()
     {
