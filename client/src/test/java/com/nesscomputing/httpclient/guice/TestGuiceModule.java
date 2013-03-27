@@ -16,9 +16,6 @@
 package com.nesscomputing.httpclient.guice;
 
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.google.inject.Binder;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
@@ -27,6 +24,10 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Stage;
 import com.google.inject.name.Names;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.nesscomputing.config.Config;
 import com.nesscomputing.config.ConfigModule;
 import com.nesscomputing.httpclient.HttpClient;

@@ -25,22 +25,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Stage;
+import com.google.inject.name.Named;
+
 import org.eclipse.jetty.server.Request;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Stage;
 import com.nesscomputing.config.ConfigModule;
-import com.nesscomputing.httpclient.HttpClient;
-import com.nesscomputing.httpclient.HttpClientObserver;
-import com.nesscomputing.httpclient.HttpClientRequest;
-import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.httpclient.HttpClientResponseHandler;
 import com.nesscomputing.httpclient.HttpClientRequest.Builder;
 import com.nesscomputing.httpclient.guice.HttpClientModule;
 import com.nesscomputing.httpclient.response.ContentResponseHandler;
