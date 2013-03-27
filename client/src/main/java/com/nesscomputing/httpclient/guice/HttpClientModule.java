@@ -49,6 +49,7 @@ import com.nesscomputing.httpclient.internal.HttpClientFactory;
 import com.nesscomputing.lifecycle.LifecycleStage;
 import com.nesscomputing.lifecycle.guice.AbstractLifecycleProvider;
 import com.nesscomputing.lifecycle.guice.LifecycleAction;
+import com.nesscomputing.logging.Log;
 
 /**
  * Guice module to bind an instance of a HttpClient. Each HttpClient should be annotated or named so that
@@ -56,6 +57,8 @@ import com.nesscomputing.lifecycle.guice.LifecycleAction;
  */
 public class HttpClientModule extends AbstractModule
 {
+    private static final Log LOG = Log.findLog();
+
     private final String clientName;
     private final Set<HttpClientObserverGroup> observerGroups;
 
@@ -237,6 +240,8 @@ public class HttpClientModule extends AbstractModule
                     .addAll(findObservers(Key.get(OBSERVER_TYPE_LITERAL, annotation)))
                     .addAll(findObserversForGroups())
                     .build();
+
+            LOG.info("HttpClient '%s' has observers: %s", httpClientObservers);
 
             final HttpClientDefaults httpClientDefaults = injector.getInstance(Key.get(HttpClientDefaults.class, annotation));
             return new ApacheHttpClient4Factory(httpClientDefaults, httpClientObservers);
