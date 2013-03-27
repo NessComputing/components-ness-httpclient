@@ -18,13 +18,14 @@ package com.nesscomputing.httpclient.guice;
 
 import java.lang.annotation.Annotation;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
 import com.google.inject.Inject;
@@ -34,18 +35,21 @@ import com.google.inject.Provider;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
+import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+
 import com.nesscomputing.config.ConfigProvider;
 import com.nesscomputing.httpclient.HttpClient;
 import com.nesscomputing.httpclient.HttpClientDefaults;
 import com.nesscomputing.httpclient.HttpClientObserver;
+import com.nesscomputing.httpclient.HttpClientObserverGroup;
 import com.nesscomputing.httpclient.factory.httpclient4.ApacheHttpClient4Factory;
 import com.nesscomputing.httpclient.internal.HttpClientFactory;
 import com.nesscomputing.lifecycle.LifecycleStage;
 import com.nesscomputing.lifecycle.guice.AbstractLifecycleProvider;
 import com.nesscomputing.lifecycle.guice.LifecycleAction;
+import com.nesscomputing.logging.Log;
 
 /**
  * Guice module to bind an instance of a HttpClient. Each HttpClient should be annotated or named so that
@@ -53,30 +57,21 @@ import com.nesscomputing.lifecycle.guice.LifecycleAction;
  */
 public class HttpClientModule extends AbstractModule
 {
-    public static final String DEFAULT_NAME = "default";
-    public static final Named DEFAULT_NAMED = Names.named(DEFAULT_NAME);
+    private static final Log LOG = Log.findLog();
 
     private final String clientName;
-
-    /**
-     * Bind an anonymous, unannotated HttpClient.  Guice 3.0 actually seems to get it right that this is not
-     * exposed for arbitrary requests with annotations.
-     */
-    public HttpClientModule()
-    {
-        this.clientName = DEFAULT_NAME;
-    }
+    private final Set<HttpClientObserverGroup> observerGroups;
 
     /**
      * Bind an named HttpClient instance.
      * @param clientName The name to use. This can be used with the Named annotation in other parts of the code.
      */
-    public HttpClientModule(@Nonnull final String clientName)
+    public HttpClientModule(@Nonnull final String clientName, @Nonnull final HttpClientObserverGroup... observerGroups)
     {
         Preconditions.checkArgument(clientName != null, "client name can not be null");
-        Preconditions.checkArgument(!DEFAULT_NAME.equals(clientName), "client name can not be '%s'", DEFAULT_NAME);
 
         this.clientName = clientName;
+        this.observerGroups = ImmutableSet.copyOf(observerGroups);
     }
 
     @Override
@@ -86,16 +81,15 @@ public class HttpClientModule extends AbstractModule
         final Annotation annotation = Names.named(clientName);
 
         bind(HttpClientDefaults.class).annotatedWith(annotation).toProvider(ConfigProvider.of(null, HttpClientDefaults.class, optionMap)).in(Scopes.SINGLETON);
-        bind(HttpClientFactory.class).annotatedWith(annotation).toProvider(new ApacheHttpClient4FactoryProvider(annotation)).in(Scopes.SINGLETON);
+        bind(HttpClientFactory.class).annotatedWith(annotation).toProvider(new ApacheHttpClient4FactoryProvider(annotation, observerGroups)).in(Scopes.SINGLETON);
         bind(HttpClient.class).annotatedWith(annotation).toProvider(new HttpClientProvider(annotation)).asEagerSingleton();
 
-        if (clientName.equals(DEFAULT_NAME)) {
-            bind(HttpClient.class).toProvider(new HttpClientProvider(annotation)).asEagerSingleton();
-        }
+        MapBinder.newMapBinder(binder(), HttpClientObserverGroup.class, HttpClientObserver.class).permitDuplicates();
+        MapBinder.newMapBinder(binder(), HttpClientObserverGroup.class, HttpClientObserverGroup.class).permitDuplicates();
     }
 
     /**
-     * Register a HttpClient observer which observes *every* Guice-bound HttpClient.
+     * Register a HttpClientObserver which observes *every* Guice-bound HttpClient.
      * @return the binding builder you should register with
      */
     public static LinkedBindingBuilder<HttpClientObserver> bindNewObserver(final Binder binder)
@@ -104,7 +98,7 @@ public class HttpClientModule extends AbstractModule
     }
 
     /**
-     * Register a HttpClient observer which observes only requests from a HttpClient with the given Guice binding annotation.
+     * Register a HttpClientObserver which observes only requests from a HttpClient with the given Guice binding annotation.
      * @return the binding builder you should register with
      */
     public static LinkedBindingBuilder<HttpClientObserver> bindNewObserver(final Binder binder, final Annotation annotation)
@@ -113,11 +107,25 @@ public class HttpClientModule extends AbstractModule
     }
 
     /**
+     * Register a HttpClientObserver which observes requests from any HttpClient that is given the specified
+     * {@link HttpClientObserverGroup}.
+     */
+    public static LinkedBindingBuilder<HttpClientObserver> bindNewObserver(final Binder binder, final HttpClientObserverGroup observerGroup)
+    {
+        return MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserver.class).addBinding(observerGroup);
+    }
+
+    public static void addObserverGroupInheritance(final Binder binder, final HttpClientObserverGroup subGroup, final HttpClientObserverGroup superGroup)
+    {
+        MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserverGroup.class).addBinding(subGroup).toInstance(superGroup);
+    }
+
+    /**
      * Provides an instance of a HttpClient. Retrieves all its dependencies based off an annotation.
      */
     static final class HttpClientProvider extends AbstractLifecycleProvider<HttpClient> implements Provider<HttpClient>
     {
-        private HttpClientDefaults  httpClientDefaults = null;
+        private HttpClientDefaults httpClientDefaults = null;
         private HttpClientFactory httpClientFactory = null;
 
         private final Annotation annotation;
@@ -159,21 +167,27 @@ public class HttpClientModule extends AbstractModule
     {
         private static final TypeLiteral<Set<HttpClientObserver>> OBSERVER_TYPE_LITERAL = new TypeLiteral<Set<HttpClientObserver>>() {};
         private final Annotation annotation;
+        private final Set<HttpClientObserverGroup> observerGroups;
 
         private Injector injector;
+        private Map<HttpClientObserverGroup, Set<HttpClientObserver>> groupObserverMap;
+        private Map<HttpClientObserverGroup, Set<HttpClientObserverGroup>> groupInheritanceMap;
 
-        private ApacheHttpClient4FactoryProvider(@Nonnull final Annotation annotation)
+        private ApacheHttpClient4FactoryProvider(@Nonnull final Annotation annotation, final Set<HttpClientObserverGroup> observerGroups)
         {
             this.annotation = annotation;
+            this.observerGroups = observerGroups;
         }
 
         @Inject
-        void setInjector(final Injector injector)
+        void setInjector(final Injector injector, Map<HttpClientObserverGroup, Set<HttpClientObserver>> groupObserverMap, Map<HttpClientObserverGroup, Set<HttpClientObserverGroup>> groupInheritanceMap)
         {
             this.injector = injector;
+            this.groupObserverMap = groupObserverMap;
+            this.groupInheritanceMap = groupInheritanceMap;
         }
 
-        private Set<HttpClientObserver> findObservers(final Injector injector, final Key<Set<HttpClientObserver>> key)
+        private Set<HttpClientObserver> findObservers(final Key<Set<HttpClientObserver>> key)
         {
             if (injector.getExistingBinding(key) != null) {
                 return injector.getInstance(key);
@@ -183,12 +197,51 @@ public class HttpClientModule extends AbstractModule
             }
         }
 
+        private Set<HttpClientObserver> findObserversForGroups()
+        {
+            // Keep track of seen groups so that we cannot recurse infinitely if there is a cycle
+            final Set<HttpClientObserverGroup> seen = new HashSet<>();
+            final Set<HttpClientObserver> result = new HashSet<>();
+
+            for (HttpClientObserverGroup group : observerGroups) {
+                result.addAll(findObservers(group, seen));
+            }
+
+            return result;
+        }
+
+        private Set<HttpClientObserver> findObservers(HttpClientObserverGroup group, Set<HttpClientObserverGroup> seen)
+        {
+            if (!seen.add(group)) {
+                return Collections.emptySet();
+            }
+
+            HashSet<HttpClientObserver> result = new HashSet<>();
+            Set<HttpClientObserver> observers = groupObserverMap.get(group);
+            if (observers != null) {
+                result.addAll(observers);
+            }
+
+            Set<HttpClientObserverGroup> inheritGroups = groupInheritanceMap.get(group);
+            if (inheritGroups != null) {
+                for (HttpClientObserverGroup superGroup : inheritGroups) {
+                    result.addAll(findObservers(superGroup, seen));
+                }
+            }
+
+            return result;
+        }
+
         @Override
         public HttpClientFactory get()
         {
-            final Set<HttpClientObserver> httpClientObservers = Sets.union(
-                    findObservers(injector, Key.get(OBSERVER_TYPE_LITERAL)),
-                    findObservers(injector, Key.get(OBSERVER_TYPE_LITERAL, annotation)));
+            final Set<HttpClientObserver> httpClientObservers = ImmutableSet.<HttpClientObserver>builder()
+                    .addAll(findObservers(Key.get(OBSERVER_TYPE_LITERAL)))
+                    .addAll(findObservers(Key.get(OBSERVER_TYPE_LITERAL, annotation)))
+                    .addAll(findObserversForGroups())
+                    .build();
+
+            LOG.info("HttpClient '%s' has observers: %s", httpClientObservers);
 
             final HttpClientDefaults httpClientDefaults = injector.getInstance(Key.get(HttpClientDefaults.class, annotation));
             return new ApacheHttpClient4Factory(httpClientDefaults, httpClientObservers);
