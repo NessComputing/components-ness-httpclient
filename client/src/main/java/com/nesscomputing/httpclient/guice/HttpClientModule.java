@@ -78,7 +78,7 @@ public class HttpClientModule extends AbstractModule
     }
 
     /**
-     * Register a HttpClient observer which observes *every* Guice-bound HttpClient.
+     * Register a HttpClientObserver which observes *every* Guice-bound HttpClient.
      * @return the binding builder you should register with
      */
     public static LinkedBindingBuilder<HttpClientObserver> bindNewObserver(final Binder binder)
@@ -87,7 +87,7 @@ public class HttpClientModule extends AbstractModule
     }
 
     /**
-     * Register a HttpClient observer which observes only requests from a HttpClient with the given Guice binding annotation.
+     * Register a HttpClientObserver which observes only requests from a HttpClient with the given Guice binding annotation.
      * @return the binding builder you should register with
      */
     public static LinkedBindingBuilder<HttpClientObserver> bindNewObserver(final Binder binder, final Annotation annotation)
