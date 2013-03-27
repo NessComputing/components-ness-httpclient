@@ -37,6 +37,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
+import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
 import com.nesscomputing.config.ConfigProvider;
@@ -58,6 +59,9 @@ import com.nesscomputing.logging.Log;
 public class HttpClientModule extends AbstractModule
 {
     private static final Log LOG = Log.findLog();
+
+    private static final String OBSERVER_GROUP = "__observer_groups";
+    private static final String INHERIT_MAP = "__observer_group_inherit";
 
     private final String clientName;
     private final Set<HttpClientObserverGroup> observerGroups;
@@ -84,8 +88,8 @@ public class HttpClientModule extends AbstractModule
         bind(HttpClientFactory.class).annotatedWith(annotation).toProvider(new ApacheHttpClient4FactoryProvider(annotation, observerGroups)).in(Scopes.SINGLETON);
         bind(HttpClient.class).annotatedWith(annotation).toProvider(new HttpClientProvider(annotation)).asEagerSingleton();
 
-        MapBinder.newMapBinder(binder(), HttpClientObserverGroup.class, HttpClientObserver.class).permitDuplicates();
-        MapBinder.newMapBinder(binder(), HttpClientObserverGroup.class, HttpClientObserverGroup.class).permitDuplicates();
+        MapBinder.newMapBinder(binder(), HttpClientObserverGroup.class, HttpClientObserver.class, Names.named(OBSERVER_GROUP)).permitDuplicates();
+        MapBinder.newMapBinder(binder(), HttpClientObserverGroup.class, HttpClientObserverGroup.class, Names.named(INHERIT_MAP)).permitDuplicates();
     }
 
     /**
@@ -112,12 +116,12 @@ public class HttpClientModule extends AbstractModule
      */
     public static LinkedBindingBuilder<HttpClientObserver> bindNewObserver(final Binder binder, final HttpClientObserverGroup observerGroup)
     {
-        return MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserver.class).addBinding(observerGroup);
+        return MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserver.class, Names.named(OBSERVER_GROUP)).addBinding(observerGroup);
     }
 
     public static void addObserverGroupInheritance(final Binder binder, final HttpClientObserverGroup subGroup, final HttpClientObserverGroup superGroup)
     {
-        MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserverGroup.class).addBinding(subGroup).toInstance(superGroup);
+        MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserverGroup.class, Names.named(INHERIT_MAP)).addBinding(subGroup).toInstance(superGroup);
     }
 
     /**
@@ -180,7 +184,7 @@ public class HttpClientModule extends AbstractModule
         }
 
         @Inject
-        void setInjector(final Injector injector, Map<HttpClientObserverGroup, Set<HttpClientObserver>> groupObserverMap, Map<HttpClientObserverGroup, Set<HttpClientObserverGroup>> groupInheritanceMap)
+        void setInjector(final Injector injector, @Named(OBSERVER_GROUP) Map<HttpClientObserverGroup, Set<HttpClientObserver>> groupObserverMap, @Named(INHERIT_MAP) Map<HttpClientObserverGroup, Set<HttpClientObserverGroup>> groupInheritanceMap)
         {
             this.injector = injector;
             this.groupObserverMap = groupObserverMap;
