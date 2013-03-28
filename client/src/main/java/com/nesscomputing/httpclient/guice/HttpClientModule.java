@@ -245,7 +245,7 @@ public class HttpClientModule extends AbstractModule
                     .addAll(findObserversForGroups())
                     .build();
 
-            LOG.info("HttpClient '%s' has observers: %s", httpClientObservers);
+            LOG.info("HttpClient '%s' has observers: %s", annotation, httpClientObservers);
 
             final HttpClientDefaults httpClientDefaults = injector.getInstance(Key.get(HttpClientDefaults.class, annotation));
             return new ApacheHttpClient4Factory(httpClientDefaults, httpClientObservers);
