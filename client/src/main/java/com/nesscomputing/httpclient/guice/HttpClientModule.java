@@ -116,12 +116,12 @@ public class HttpClientModule extends AbstractModule
      */
     public static LinkedBindingBuilder<HttpClientObserver> bindNewObserver(final Binder binder, final HttpClientObserverGroup observerGroup)
     {
-        return MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserver.class, Names.named(OBSERVER_GROUP)).addBinding(observerGroup);
+        return MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserver.class, Names.named(OBSERVER_GROUP)).permitDuplicates().addBinding(observerGroup);
     }
 
     public static void addObserverGroupInheritance(final Binder binder, final HttpClientObserverGroup subGroup, final HttpClientObserverGroup superGroup)
     {
-        MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserverGroup.class, Names.named(INHERIT_MAP)).addBinding(subGroup).toInstance(superGroup);
+        MapBinder.newMapBinder(binder, HttpClientObserverGroup.class, HttpClientObserverGroup.class, Names.named(INHERIT_MAP)).permitDuplicates().addBinding(subGroup).toInstance(superGroup);
     }
 
     /**
