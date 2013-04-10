@@ -17,6 +17,7 @@ package com.nesscomputing.httpclient.response;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -96,10 +97,13 @@ public class StreamedJsonContentConverter<T> extends AbstractErrorHandlingConten
                     throw new JsonParseException("expecting results field", jp.getCurrentLocation());
                 }
                 expect(jp, jp.nextToken(), JsonToken.START_ARRAY);
-                while (jp.nextToken() != JsonToken.END_ARRAY) {
+                jp.nextToken(); // readValuesAs must be positioned after the START_ARRAY token, per javadoc.
+
+                Iterator<T> iter = jp.readValuesAs(typeRef);
+
+                while (iter.hasNext()) {
                     try {
-                        final T data = jp.readValueAs(typeRef);
-                        callback.call(data);
+                        callback.call(iter.next());
                     }
                     catch (CallbackRefusedException e) {
                         LOG.debug(e, "callback refused execution, finishing.");
