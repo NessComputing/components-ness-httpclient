@@ -89,8 +89,7 @@ public class StreamedJsonContentConverter<T> extends AbstractErrorHandlingConten
             return null;
 
         case 200:
-            final JsonParser jp = mapper.getFactory().createJsonParser(inputStream);
-            try {
+            try (final JsonParser jp = mapper.getFactory().createJsonParser(inputStream)) {
                 expect(jp, jp.nextToken(), JsonToken.START_OBJECT);
                 expect(jp, jp.nextToken(), JsonToken.FIELD_NAME);
                 if (!"results".equals(jp.getCurrentName())) {
@@ -125,9 +124,6 @@ public class StreamedJsonContentConverter<T> extends AbstractErrorHandlingConten
                     throw new IOException("Streamed receive did not terminate normally; inspect server logs for cause.");
                 }
                 return null;
-            }
-            finally {
-                jp.close();
             }
 
         default:
