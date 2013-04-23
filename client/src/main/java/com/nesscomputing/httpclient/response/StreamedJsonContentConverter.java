@@ -97,7 +97,10 @@ public class StreamedJsonContentConverter<T> extends AbstractErrorHandlingConten
                     throw new JsonParseException("expecting results field", jp.getCurrentLocation());
                 }
                 expect(jp, jp.nextToken(), JsonToken.START_ARRAY);
-                jp.nextToken(); // readValuesAs must be positioned after the START_ARRAY token, per javadoc.
+                // As noted in a well-hidden comment in the MappingIterator constructor,
+                // readValuesAs requires the parser to be positioned after the START_ARRAY
+                // token with an empty current token
+                jp.clearCurrentToken();
 
                 Iterator<T> iter = jp.readValuesAs(typeRef);
 
