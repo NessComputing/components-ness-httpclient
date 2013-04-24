@@ -61,8 +61,9 @@ public class NessCookieSpecFactory implements CookieSpecFactory
 
     public static class NessDomainHandler implements CookieAttributeHandler
     {
+        @Override
         public void parse(final SetCookie cookie, final String value)
-            throws MalformedCookieException
+        throws MalformedCookieException
         {
             if (cookie == null) {
                 throw new IllegalArgumentException("Cookie may not be null");
@@ -76,8 +77,9 @@ public class NessCookieSpecFactory implements CookieSpecFactory
             cookie.setDomain(value);
         }
 
+        @Override
         public void validate(final Cookie cookie, final CookieOrigin origin)
-            throws MalformedCookieException
+        throws MalformedCookieException
         {
             if (cookie == null) {
                 throw new IllegalArgumentException("Cookie may not be null");
@@ -89,6 +91,7 @@ public class NessCookieSpecFactory implements CookieSpecFactory
             // Everything else is allowed.
         }
 
+        @Override
         public boolean match(final Cookie cookie, final CookieOrigin origin)
         {
             if (cookie == null) {

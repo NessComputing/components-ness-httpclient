@@ -22,13 +22,16 @@ import com.nesscomputing.httpclient.HttpClientResponse;
 
 public class TestStreamedJsonContentConverter
 {
+    private static final TypeReference<Integer> INT_TYPE_REF = new TypeReference<Integer>() {};
+
     public static final String TEST_JSON = "{\"results\": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], \"success\":true}";
+    public static final String EMPTY_JSON = "{\"results\": [], \"success\":true}";
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private static InputStream inputStream()
+    private static InputStream inputStream(String json)
     {
-        return new ByteArrayInputStream(TEST_JSON.getBytes(Charsets.UTF_8));
+        return new ByteArrayInputStream(json.getBytes(Charsets.UTF_8));
     }
     private static HttpClientResponse response(int status)
     {
@@ -42,7 +45,7 @@ public class TestStreamedJsonContentConverter
     public void testSuccess() throws Exception
     {
         CallbackCollector<Integer> callback = new CallbackCollector<>();
-        new StreamedJsonContentConverter<>(mapper, callback, new TypeReference<Integer>() {}).convert(response(200), inputStream());
+        new StreamedJsonContentConverter<>(mapper, callback, INT_TYPE_REF).convert(response(200), inputStream(TEST_JSON));
 
         assertEquals(ImmutableList.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), callback.getItems());
     }
@@ -62,8 +65,15 @@ public class TestStreamedJsonContentConverter
                 items.add(item);
             }
         };
-        new StreamedJsonContentConverter<>(mapper, callback, new TypeReference<Integer>() {}).convert(response(200), inputStream());
+        new StreamedJsonContentConverter<>(mapper, callback, INT_TYPE_REF).convert(response(200), inputStream(TEST_JSON));
 
         assertEquals(ImmutableList.of(1, 2, 3, 4), items);
+    }
+
+    @Test
+    public void testEmpty() throws Exception
+    {
+        CallbackCollector<Integer> callback = new CallbackCollector<>();
+        new StreamedJsonContentConverter<>(mapper, callback, INT_TYPE_REF).convert(response(200), inputStream(EMPTY_JSON));
     }
 }

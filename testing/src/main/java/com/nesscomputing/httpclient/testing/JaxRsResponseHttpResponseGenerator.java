@@ -74,7 +74,7 @@ public class JaxRsResponseHttpResponseGenerator implements ResponseGenerator<Obj
         this.response = response;
         Object entity = response.getEntity();
         charset = Charsets.UTF_8.name();
-        MediaType contentType = null;
+        MediaType contentTypeIn = null;
         List<Object> typeHeaders = response.getMetadata().get("Content-Type");
         if (typeHeaders == null) { // Damn you to hell, people who reinvent Multimap poorly!
             typeHeaders = Collections.emptyList();
@@ -82,27 +82,27 @@ public class JaxRsResponseHttpResponseGenerator implements ResponseGenerator<Obj
         Preconditions.checkArgument(typeHeaders.size() <= 1, "multiple Content-Type headers?!");
         final byte[] encoded;
         if (!typeHeaders.isEmpty()) {
-            contentType = MediaType.valueOf(typeHeaders.get(0).toString());
+            contentTypeIn = MediaType.valueOf(typeHeaders.get(0).toString());
         }
         if (entity == null) {
-            if (contentType == null) {
-                contentType = MediaType.TEXT_PLAIN_TYPE;
+            if (contentTypeIn == null) {
+                contentTypeIn = MediaType.TEXT_PLAIN_TYPE;
             }
             encoded = new byte[0];
         } else if (entity instanceof String) {
-            if (contentType == null) {
-                contentType = MediaType.TEXT_PLAIN_TYPE;
+            if (contentTypeIn == null) {
+                contentTypeIn = MediaType.TEXT_PLAIN_TYPE;
             }
             encoded = ((String) entity).getBytes(Charsets.UTF_8);
         } else if (entity instanceof byte[]) {
-            if (contentType == null) {
-                contentType = MediaType.APPLICATION_OCTET_STREAM_TYPE;
+            if (contentTypeIn == null) {
+                contentTypeIn = MediaType.APPLICATION_OCTET_STREAM_TYPE;
             }
             encoded = (byte[]) entity;
         } else {
             Preconditions.checkNotNull(mapper, "Mapper null and unknown type " + entity.getClass() + " provided");
-            if (contentType == null) {
-                contentType = MediaType.APPLICATION_JSON_TYPE;
+            if (contentTypeIn == null) {
+                contentTypeIn = MediaType.APPLICATION_JSON_TYPE;
             }
             try {
                 encoded = mapper.writeValueAsBytes(entity);
@@ -112,7 +112,7 @@ public class JaxRsResponseHttpResponseGenerator implements ResponseGenerator<Obj
         }
         responseBody = new ByteArrayInputStream(encoded);
         contentLength = encoded.length;
-        this.contentType = contentType;
+        this.contentType = contentTypeIn;
     }
 
     @Override

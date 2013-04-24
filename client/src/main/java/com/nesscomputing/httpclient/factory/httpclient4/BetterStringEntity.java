@@ -21,12 +21,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
+import com.google.common.base.Preconditions;
+
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.protocol.HTTP;
-
-import com.google.common.base.Preconditions;
 
 /**
  * A self contained, repeatable entity that obtains its content from
@@ -54,21 +54,25 @@ public class BetterStringEntity extends AbstractHttpEntity implements Cloneable
         setContentType(HTTP.PLAIN_TEXT_TYPE + HTTP.CHARSET_PARAM + charsetObj.name());
     }
 
+    @Override
     public boolean isRepeatable()
     {
         return true;
     }
 
+    @Override
     public long getContentLength()
     {
         return this.content.length;
     }
 
+    @Override
     public InputStream getContent() throws IOException
     {
         return new ByteArrayInputStream(this.content);
     }
 
+    @Override
     public void writeTo(final OutputStream outstream) throws IOException
     {
         if (outstream == null) {
@@ -83,14 +87,15 @@ public class BetterStringEntity extends AbstractHttpEntity implements Cloneable
      *
      * @return <code>false</code>
      */
+    @Override
     public boolean isStreaming()
     {
         return false;
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException
     {
         return super.clone();
     }
-
 }
