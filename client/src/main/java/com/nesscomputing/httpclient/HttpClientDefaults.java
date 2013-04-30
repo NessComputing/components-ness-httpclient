@@ -22,7 +22,7 @@ import org.skife.config.Default;
 import org.skife.config.DefaultNull;
 import org.skife.config.TimeSpan;
 
-/** 
+/**
  * Default configuration bean for the HTTP client. Can be configured using config-magic.
  */
 public class HttpClientDefaults
@@ -246,5 +246,12 @@ public class HttpClientDefaults
     public String getSSLKeystoreType()
     {
         return "JKS";
+    }
+
+    @Config({"ness.httpclient.${httpclient_name}.accept-encoding", "ness.httpclient.accept-encoding"})
+    @Default("lz4,gzip,deflate")
+    public String getDefaultAcceptEncoding()
+    {
+        return "lz4,gzip,deflate";
     }
 }
