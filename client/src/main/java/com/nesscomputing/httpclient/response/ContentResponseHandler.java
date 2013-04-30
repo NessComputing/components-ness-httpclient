@@ -15,20 +15,22 @@
  */
 package com.nesscomputing.httpclient.response;
 
-import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.httpclient.HttpClientResponseHandler;
-import com.nesscomputing.httpclient.io.SizeExceededException;
-import com.nesscomputing.httpclient.io.SizeLimitingInputStream;
-import com.nesscomputing.logging.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
+import net.jpountz.lz4.LZ4BlockInputStream;
+
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.lang3.StringUtils;
+
+import com.nesscomputing.httpclient.HttpClientResponse;
+import com.nesscomputing.httpclient.HttpClientResponseHandler;
+import com.nesscomputing.httpclient.io.SizeExceededException;
+import com.nesscomputing.httpclient.io.SizeLimitingInputStream;
+import com.nesscomputing.logging.Log;
 
 
 /**
@@ -127,7 +129,10 @@ public class ContentResponseHandler<T> implements HttpClientResponseHandler<T>
 
                 final String encoding = StringUtils.trimToEmpty(response.getHeader("Content-Encoding"));
 
-                if (StringUtils.equalsIgnoreCase(encoding, "gzip") || StringUtils.equalsIgnoreCase(encoding, "x-gzip")) {
+                if (StringUtils.equalsIgnoreCase(encoding, "lz4")) {
+                    LOG.debug("Found LZ4 stream");
+                    is = new LZ4BlockInputStream(is);
+                } else if (StringUtils.equalsIgnoreCase(encoding, "gzip") || StringUtils.equalsIgnoreCase(encoding, "x-gzip")) {
                     LOG.debug("Found GZIP stream");
                     is = new GZIPInputStream(is);
                 }
