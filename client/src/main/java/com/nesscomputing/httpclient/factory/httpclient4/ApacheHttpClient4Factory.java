@@ -36,6 +36,7 @@ import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.Cookie;
 
 import com.google.common.base.Preconditions;
+import com.google.common.net.HttpHeaders;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.Charsets;
@@ -115,6 +116,7 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
     private volatile IdleTimeoutThread idleTimeoutThread = null;
 
     private final Set<? extends HttpClientObserver> httpClientObservers;
+    private final String defaultAcceptEncoding;
 
     public ApacheHttpClient4Factory(final HttpClientDefaults clientDefaults,
                                     @Nullable final Set<? extends HttpClientObserver> httpClientObservers)
@@ -143,6 +145,8 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
         }
 
         connectionManager = new ThreadSafeClientConnManager(registry);
+
+        defaultAcceptEncoding = StringUtils.trimToNull(clientDefaults.getDefaultAcceptEncoding());
     }
 
     /**
@@ -294,6 +298,8 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
                 LOG.trace ("Request was modified by Observers!");
             }
         }
+
+        request = contributeAcceptEncoding(request);
 
         LOG.trace("Got a '%s' request", request.getHttpMethod());
 
@@ -514,6 +520,21 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
         if (CollectionUtils.isNotEmpty(authProviders)) {
             httpClient.setCredentialsProvider(new InternalCredentialsProvider(authProviders));
         }
+    }
+
+    private <T> HttpClientRequest<T> contributeAcceptEncoding(HttpClientRequest<T> request)
+    {
+        if (defaultAcceptEncoding == null) {
+            return request;
+        }
+
+        for (HttpClientHeader h : request.getHeaders()) {
+            if (StringUtils.equalsIgnoreCase(HttpHeaders.ACCEPT_ENCODING, h.getName())) {
+                return request;
+            }
+        }
+
+        return HttpClientRequest.Builder.fromRequest(request).addHeader(HttpHeaders.ACCEPT_ENCODING, defaultAcceptEncoding).request();
     }
 
     private <T> HttpParams setFollowRedirects(final HttpParams params,
