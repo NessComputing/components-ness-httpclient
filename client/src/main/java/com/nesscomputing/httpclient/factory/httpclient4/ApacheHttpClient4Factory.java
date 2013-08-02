@@ -582,7 +582,7 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
 
         @Override
         public void setRequestTimeout(final long reqTimeout) {
-            params.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, (int) reqTimeout);
+            // TODO: what should this set?
         }
 
         @Override
