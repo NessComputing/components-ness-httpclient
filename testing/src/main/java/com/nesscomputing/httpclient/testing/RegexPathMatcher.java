@@ -51,8 +51,9 @@ class RegexPathMatcher implements RequestMatcher
     @Override
     public boolean equals(final Object other)
     {
-        if (!(other instanceof RegexPathMatcher))
+        if (!(other instanceof RegexPathMatcher)) {
             return false;
+        }
         RegexPathMatcher castOther = (RegexPathMatcher) other;
         return new EqualsBuilder().append(method, castOther.method).append(pattern, castOther.pattern).isEquals();
     }

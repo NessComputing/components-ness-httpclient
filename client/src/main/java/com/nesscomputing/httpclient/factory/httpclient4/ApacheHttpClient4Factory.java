@@ -470,7 +470,7 @@ public class ApacheHttpClient4Factory implements HttpClientFactory
     {
         final Map<String, Object> parameters = httpClientRequest.getParameters();
 
-        if (parameters != null && parameters.size() > 0) {
+        if (parameters != null && !parameters.isEmpty()) {
             HttpParams clientParams = httpClient.getParams();
             HttpParams requestParams = httpRequest.getParams();
 

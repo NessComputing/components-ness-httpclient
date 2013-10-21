@@ -60,17 +60,16 @@ public class Valid2xxContentConverter extends AbstractErrorHandlingContentConver
                 return Boolean.TRUE;
 
             case 404:
-                if (ignore404) {
-                    return Boolean.FALSE;
+                if (!ignore404 && failOnError) {
+                    throw throwHttpResponseException(httpClientResponse);
                 }
-                // FALL THROUGH
+                return Boolean.FALSE;
+
             default:
                 if (failOnError) {
                     throw throwHttpResponseException(httpClientResponse);
                 }
-                else {
-                    return Boolean.FALSE;
-                }
+                return Boolean.FALSE;
         }
     }
 }

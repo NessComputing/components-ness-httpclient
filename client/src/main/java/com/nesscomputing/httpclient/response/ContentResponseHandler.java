@@ -120,7 +120,7 @@ public class ContentResponseHandler<T> implements HttpClientResponseHandler<T>
 
                 if (maxBodyLength > 0) {
                     if (contentLength != null && contentLength > maxBodyLength) {
-                        throw new SizeExceededException("Content-Length: " + String.valueOf(contentLength));
+                        throw new SizeExceededException("Content-Length: " + contentLength);
                     }
 
                     LOG.debug("Limiting stream length to '%d'", maxBodyLength);
@@ -143,9 +143,6 @@ public class ContentResponseHandler<T> implements HttpClientResponseHandler<T>
                 }
 
                 return contentConverter.convert(response, is);
-            }
-            catch (HttpResponseException hre) {
-                throw hre;
             }
             catch (IOException ioe) {
                 return contentConverter.handleError(response, ioe);

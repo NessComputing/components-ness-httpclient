@@ -75,8 +75,7 @@ public class StringContentConverter extends AbstractErrorHandlingContentConverte
                 if (ignore404) {
                     return "";
                 }
-
-                // FALL THROUGH
+                throw throwHttpResponseException(httpClientResponse);
 
             default:
                 throw throwHttpResponseException(httpClientResponse);
