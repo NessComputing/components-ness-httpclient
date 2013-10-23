@@ -426,13 +426,13 @@ public class HttpClientRequest<T>
                 String value = entry.getValue();
 
                 if (!first) {
-                    sb.append("&");
+                    sb.append('&');
                 } else {
                     first = false;
                 }
 
                 sb.append(URLEncoder.encode(key, encoding));
-                sb.append("=");
+                sb.append('=');
                 if (key != null) {
                     sb.append(URLEncoder.encode(value, encoding));
                 }

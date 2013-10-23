@@ -103,8 +103,7 @@ public class NumberContentConverter<T extends Number> extends AbstractErrorHandl
                 if (ignore404) {
                     return emptyValue;
                 }
-
-                // FALL THROUGH
+                throw throwHttpResponseException(httpClientResponse);
 
             default:
                 throw throwHttpResponseException(httpClientResponse);

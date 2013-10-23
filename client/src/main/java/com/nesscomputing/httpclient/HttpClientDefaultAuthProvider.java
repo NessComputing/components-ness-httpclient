@@ -132,8 +132,9 @@ public class HttpClientDefaultAuthProvider implements HttpClientAuthProvider
     @Override
     public boolean equals(final Object other)
     {
-        if (!(other instanceof HttpClientDefaultAuthProvider))
+        if (!(other instanceof HttpClientDefaultAuthProvider)) {
             return false;
+        }
         HttpClientDefaultAuthProvider castOther = (HttpClientDefaultAuthProvider) other;
         return new EqualsBuilder().append(scheme, castOther.scheme).append(host, castOther.host).append(port, castOther.port).append(realm, castOther.realm).append(user, castOther.user).append(password, castOther.password).isEquals();
     }

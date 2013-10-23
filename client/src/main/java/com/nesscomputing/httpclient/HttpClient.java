@@ -18,6 +18,7 @@ package com.nesscomputing.httpclient;
 
 import java.io.Closeable;
 import java.net.URI;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -46,9 +47,9 @@ public final class HttpClient implements Closeable
 
     /**
      * Creates a new HTTP client with the default implementation (currently Apache HTTPClient 4).
-	 *
-	 * @param defaults the defaults to use
-	 */
+    *
+    * @param defaults the defaults to use
+    */
     public HttpClient(final HttpClientDefaults defaults)
     {
         this(new ApacheHttpClient4Factory(defaults, null));
@@ -66,8 +67,8 @@ public final class HttpClient implements Closeable
 
     /**
      * Creates a new HTTP client with a custom HttpClientFactory and default settings.
-	 * @param httpClientFactory factory to use
-	 */
+    * @param httpClientFactory factory to use
+    */
     public HttpClient(final HttpClientFactory httpClientFactory)
     {
         this(httpClientFactory, new HttpClientDefaults());
@@ -137,8 +138,8 @@ public final class HttpClient implements Closeable
     }
 
     /**
-	 * @return the connection context for this client. This contains settings such as timeout, number of retries etc.
-	 */
+    * @return the connection context for this client. This contains settings such as timeout, number of retries etc.
+    */
     public HttpClientConnectionContext getConnectionContext()
     {
         return httpClientFactory.getConnectionContext();
@@ -270,7 +271,7 @@ public final class HttpClient implements Closeable
     public <T> HttpClientRequest.Builder<T> perform(final String methodName, final URI uri, final HttpClientResponseHandler<T> httpHandler) {
         final HttpClientMethod method;
         try {
-            method = HttpClientMethod.valueOf(methodName.toUpperCase());
+            method = HttpClientMethod.valueOf(methodName.toUpperCase(Locale.ENGLISH));
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Unknown HTTP method type " + methodName, e);
         }

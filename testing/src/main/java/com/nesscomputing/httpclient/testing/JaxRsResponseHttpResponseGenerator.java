@@ -154,16 +154,18 @@ public class JaxRsResponseHttpResponseGenerator implements ResponseGenerator<Obj
             @Override
             public String getHeader(String name) {
                 List<Object> headers = response.getMetadata().get(name);
-                if (headers == null || headers.isEmpty())
+                if (headers == null || headers.isEmpty()) {
                     return null;
+                }
                 return headers.get(0).toString();
             }
 
             @Override
             public List<String> getHeaders(String name) {
                 List<Object> headers = response.getMetadata().get(name);
-                if (headers == null)
+                if (headers == null) {
                      return null;
+                }
                 return ImmutableList.copyOf(Collections2.transform(headers, Functions.toStringFunction()));
             }
 
@@ -186,7 +188,7 @@ public class JaxRsResponseHttpResponseGenerator implements ResponseGenerator<Obj
     @Override
     public String toString() {
         return String.format("JaxRsResponseHttpResponseGenerator" +
-        		" [status=%d %s, contentType=%s, contentLength=%s, charset=%s]",
+                " [status=%d %s, contentType=%s, contentLength=%s, charset=%s]",
                         response.getStatus(), Status.fromStatusCode(response.getStatus()).getReasonPhrase(),
                         contentType, contentLength, charset);
     }

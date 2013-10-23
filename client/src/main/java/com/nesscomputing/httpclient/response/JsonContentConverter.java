@@ -95,7 +95,8 @@ public class JsonContentConverter<T> extends AbstractErrorHandlingContentConvert
                 if (ignore404) {
                     return null;
                 }
-            // FALL THROUGH
+                throw throwHttpResponseException(httpClientResponse);
+
             default:
                 throw throwHttpResponseException(httpClientResponse);
         }
