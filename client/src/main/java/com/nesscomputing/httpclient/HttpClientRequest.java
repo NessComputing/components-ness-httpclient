@@ -433,7 +433,7 @@ public class HttpClientRequest<T>
 
                 sb.append(URLEncoder.encode(key, encoding));
                 sb.append('=');
-                if (key != null) {
+                if (value != null) {
                     sb.append(URLEncoder.encode(value, encoding));
                 }
             }

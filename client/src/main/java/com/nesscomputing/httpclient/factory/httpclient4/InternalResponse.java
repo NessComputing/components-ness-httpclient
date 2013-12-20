@@ -124,9 +124,9 @@ final class InternalResponse implements HttpClientResponse
         return values;
     }
 
-	@Override
+    @Override
     @Nonnull
-	public Map<String,List<String>> getAllHeaders() {
+    public Map<String,List<String>> getAllHeaders() {
         Map<String, List<String>> headerMap = new TreeMap<String,
             List<String>>(String.CASE_INSENSITIVE_ORDER);
 
@@ -196,8 +196,8 @@ final class InternalResponse implements HttpClientResponse
     @Override
     public String toString() {
         return String.format("InternalResponse [getContentType()=%s, getContentLength()=%s," +
-            		" getCharset()=%s, getAllHeaders()=%s, getStatusCode()=%s," +
-            		" getStatusText()=%s, getUri()=%s, isRedirected()=%s]",
+                    " getCharset()=%s, getAllHeaders()=%s, getStatusCode()=%s," +
+                    " getStatusText()=%s, getUri()=%s, isRedirected()=%s]",
                 getContentType(), getContentLength(), getCharset(),
                 getAllHeaders(), getStatusCode(), getStatusText(),
                 getUri(), isRedirected());

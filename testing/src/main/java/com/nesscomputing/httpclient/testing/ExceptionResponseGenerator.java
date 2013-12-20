@@ -35,6 +35,6 @@ public class ExceptionResponseGenerator implements ResponseGenerator {
     @Override
     public HttpClientResponse respondTo(HttpClientRequest request)
     throws IOException {
-    	throw io;
+        throw io;
     }
 }

@@ -38,17 +38,17 @@ public interface HttpClientFactory
      * Stop the Factory. Should free all resources and shut down all connections. After stop() has been called,
      * the factory should throw exceptions on all related method calls.
      */
-	void stop();
+    void stop();
 
-	/**
-	 * True if the start() method was invoked successfully.
-	 */
-	boolean isStarted();
+    /**
+     * True if the start() method was invoked successfully.
+     */
+    boolean isStarted();
 
     /**
      * True if the stop() method was invoked successfully.
      */
-	boolean isStopped();
+    boolean isStopped();
 
     /**
      * @return a {@link HttpClientConnectionContext} object to modify settings for this factory.
@@ -59,7 +59,7 @@ public interface HttpClientFactory
      * For requests that accept a body, generate a {@link HttpClientBodySource} object that wraps
      * the content object. Can return null if no appropriate body source is available.
      */
-	@CheckForNull
+    @CheckForNull
     HttpClientBodySource getHttpBodySourceFor(Object content);
 
     /**

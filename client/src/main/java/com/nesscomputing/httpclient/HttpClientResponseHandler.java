@@ -19,7 +19,7 @@ import java.io.IOException;
 
 /**
  * A content handler. It parses the response from the server and generates the
- * content object. 
+ * content object.
  */
 public interface HttpClientResponseHandler<T>
 {

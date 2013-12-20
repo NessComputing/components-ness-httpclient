@@ -49,7 +49,7 @@ public class SizeLimitingInputStream extends FilterInputStream
         }
     }
 
-    private final void ensureLimit()
+    private void ensureLimit()
         throws SizeExceededException
     {
         if (count > maxSize) {
@@ -57,7 +57,7 @@ public class SizeLimitingInputStream extends FilterInputStream
         }
     }
 
-    private final void throwException()
+    private void throwException()
         throws SizeExceededException
     {
         throw new SizeExceededException("SizeLimitInputStream: maximum size %d exceeded, actual = %d", maxSize, count);

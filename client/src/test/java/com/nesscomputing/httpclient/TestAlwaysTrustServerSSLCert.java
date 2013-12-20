@@ -30,6 +30,7 @@ import com.nesscomputing.httpclient.testsupport.LocalHttpService;
 import com.nesscomputing.httpclient.testsupport.StringResponseConverter;
 import com.nesscomputing.testing.lessio.AllowNetworkAccess;
 
+import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import java.io.IOException;
 
@@ -66,8 +67,8 @@ public class TestAlwaysTrustServerSSLCert {
             final String uri = "https://" + localHttpService.getHost() + ":" + localHttpService.getPort() + "/data";
             httpClient.get(uri, responseHandler).perform();
             fail();
-        } catch (SSLPeerUnverifiedException ignored) {
-            // success
+        } catch (SSLException e) {
+            // ignore
         }
     }
 
