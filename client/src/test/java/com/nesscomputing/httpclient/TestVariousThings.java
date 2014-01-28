@@ -19,27 +19,22 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-
 import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.nesscomputing.httpclient.HttpClient;
-import com.nesscomputing.httpclient.HttpClientRequest;
-import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.httpclient.HttpClientResponseHandler;
 import com.nesscomputing.httpclient.internal.HttpClientHeader;
 import com.nesscomputing.httpclient.response.ContentResponseHandler;
 import com.nesscomputing.httpclient.testsupport.GenericTestHandler;
 import com.nesscomputing.httpclient.testsupport.LocalHttpService;
 import com.nesscomputing.httpclient.testsupport.StringResponseConverter;
-import com.nesscomputing.testing.lessio.AllowNetworkAccess;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.kitei.testing.lessio.AllowNetworkAccess;
 
 
 @AllowNetworkAccess(endpoints={"127.0.0.1:*"})

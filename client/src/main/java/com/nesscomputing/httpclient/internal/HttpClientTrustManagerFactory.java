@@ -15,9 +15,6 @@
  */
 package com.nesscomputing.httpclient.internal;
 
-import com.nesscomputing.httpclient.HttpClientDefaults;
-import com.nesscomputing.logging.Log;
-
 import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
@@ -32,10 +29,13 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.base.Preconditions;
 import com.google.common.io.Resources;
+
+import com.nesscomputing.httpclient.HttpClientDefaults;
+import com.nesscomputing.logging.Log;
+
+import org.apache.commons.lang3.StringUtils;
 
 public final class HttpClientTrustManagerFactory {
     private static final Log LOG = Log.findLog();

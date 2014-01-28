@@ -39,10 +39,10 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import com.nesscomputing.httpclient.HttpClientRequest;
 import com.nesscomputing.httpclient.HttpClientResponse;
+
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * An all-purpose {@link ResponseGenerator} which supports converting JAX-RS {@link Response}

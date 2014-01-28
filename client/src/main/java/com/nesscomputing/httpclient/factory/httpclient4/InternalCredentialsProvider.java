@@ -19,12 +19,12 @@ package com.nesscomputing.httpclient.factory.httpclient4;
 import java.security.Principal;
 import java.util.List;
 
+import com.nesscomputing.httpclient.HttpClientAuthProvider;
+
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.BasicUserPrincipal;
 import org.apache.http.auth.Credentials;
 import org.apache.http.client.CredentialsProvider;
-
-import com.nesscomputing.httpclient.HttpClientAuthProvider;
 
 /**
  * An Apache Httpclient credentials provider that uses the internal structures of the tc-httpclient to provide

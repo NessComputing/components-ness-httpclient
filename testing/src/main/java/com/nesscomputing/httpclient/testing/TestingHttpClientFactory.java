@@ -25,15 +25,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.concurrent.Immutable;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-import com.nesscomputing.httpclient.HttpClient;
 import com.nesscomputing.httpclient.HttpClientConnectionContext;
 import com.nesscomputing.httpclient.HttpClientObserver;
 import com.nesscomputing.httpclient.HttpClientRequest;
@@ -42,6 +39,8 @@ import com.nesscomputing.httpclient.internal.HttpClientBodySource;
 import com.nesscomputing.httpclient.internal.HttpClientFactory;
 import com.nesscomputing.httpclient.internal.HttpClientHeader;
 import com.nesscomputing.logging.Log;
+
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * The actual dispatch logic behind a test {@link HttpClient}.  Implements request matching

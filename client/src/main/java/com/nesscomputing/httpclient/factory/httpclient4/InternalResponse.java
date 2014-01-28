@@ -15,9 +15,6 @@
  */
 package com.nesscomputing.httpclient.factory.httpclient4;
 
-import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.logging.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -28,6 +25,11 @@ import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.Lists;
+
+import com.nesscomputing.httpclient.HttpClientResponse;
+import com.nesscomputing.logging.Log;
+
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -37,8 +39,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.util.EntityUtils;
-
-import com.google.common.collect.Lists;
 
 /**
  * Apache HttpClient4 implementation of {@link HttpClientResponse}.

@@ -17,9 +17,7 @@ package com.nesscomputing.httpclient;
 
 
 import com.google.common.io.Resources;
-import com.nesscomputing.httpclient.HttpClient;
-import com.nesscomputing.httpclient.HttpClientDefaults;
-import com.nesscomputing.httpclient.HttpClientRequest;
+
 import com.nesscomputing.httpclient.testsupport.LocalHttpService;
 
 import org.junit.Assert;

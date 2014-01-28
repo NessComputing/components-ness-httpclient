@@ -29,10 +29,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nesscomputing.httpclient.internal.HttpClientHeader;
+
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-
-import com.nesscomputing.httpclient.internal.HttpClientHeader;
 
 
 public class GenericTestHandler extends AbstractHandler

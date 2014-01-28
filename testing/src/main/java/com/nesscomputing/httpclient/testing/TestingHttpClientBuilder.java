@@ -22,7 +22,6 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

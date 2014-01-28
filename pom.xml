@@ -5,148 +5,16 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.nesscomputing</groupId>
-    <artifactId>ness-oss-parent</artifactId>
-    <version>26</version>
+    <artifactId>ness-root</artifactId>
+    <version>1.0-SNAPSHOT</version>
   </parent>
-
-  <scm>
-    <connection>scm:git:git://github.com/NessComputing/components-ness-httpclient.git</connection>
-    <developerConnection>scm:git:git@github.com:NessComputing/components-ness-httpclient.git</developerConnection>
-    <url>http://github.com/NessComputing/components-ness-httpclient</url>
-    <tag>HEAD</tag>
-  </scm>
 
   <groupId>com.nesscomputing.components</groupId>
   <artifactId>ness-httpclient-parent</artifactId>
-  <version>2.0.6-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
     <module>client</module>
     <module>testing</module>
   </modules>
-
-  <properties>
-    <dep.jackson.version>2.1.2</dep.jackson.version>
-    <dep.jersey.version>1.16</dep.jersey.version>
-    <dep.jetty.version>8.1.3.v20120416</dep.jetty.version>
-  </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>com.nesscomputing.components</groupId>
-        <artifactId>ness-httpclient</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.nesscomputing.components</groupId>
-        <artifactId>ness-httpclient-testing</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.nesscomputing.components</groupId>
-        <artifactId>ness-core</artifactId>
-        <version>1.5.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.nesscomputing.components</groupId>
-        <artifactId>ness-lifecycle</artifactId>
-        <version>1.2.2</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.nesscomputing.components</groupId>
-        <artifactId>ness-logging</artifactId>
-        <version>1.1.1</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.nesscomputing.components</groupId>
-        <artifactId>ness-config</artifactId>
-        <version>2.2.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.nesscomputing.testing</groupId>
-        <artifactId>findbugs-annotations</artifactId>
-        <version>2.0.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient</artifactId>
-        <version>4.1.3</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpcore</artifactId>
-        <version>4.1.4</version>
-      </dependency>
-
-      <dependency>
-        <groupId>net.jpountz.lz4</groupId>
-        <artifactId>lz4</artifactId>
-        <version>1.2.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.sun.jersey</groupId>
-        <artifactId>jersey-core</artifactId>
-        <version>${dep.jersey.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.sun.jersey</groupId>
-        <artifactId>jersey-server</artifactId>
-        <version>${dep.jersey.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${dep.jackson.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>${dep.jackson.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-http</artifactId>
-        <version>${dep.jetty.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-util</artifactId>
-        <version>${dep.jetty.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-server</artifactId>
-        <version>${dep.jetty.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.eclipse.jetty.orbit</groupId>
-            <artifactId>javax.servlet</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-security</artifactId>
-        <version>${dep.jetty.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 </project>

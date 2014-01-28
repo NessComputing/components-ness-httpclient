@@ -25,15 +25,15 @@ import com.google.inject.Module;
 import com.google.inject.Stage;
 import com.google.inject.name.Names;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.nesscomputing.config.Config;
 import com.nesscomputing.config.ConfigModule;
 import com.nesscomputing.httpclient.HttpClient;
 import com.nesscomputing.lifecycle.Lifecycle;
 import com.nesscomputing.lifecycle.LifecycleStage;
 import com.nesscomputing.lifecycle.guice.LifecycleModule;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 public class TestGuiceModule
 {

@@ -17,6 +17,7 @@ package com.nesscomputing.httpclient.testing;
 
 import static com.nesscomputing.httpclient.internal.HttpClientMethod.GET;
 import static com.nesscomputing.httpclient.internal.HttpClientMethod.PUT;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -39,15 +40,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-
 import com.nesscomputing.httpclient.HttpClient;
 import com.nesscomputing.httpclient.HttpClientRequest;
 import com.nesscomputing.httpclient.HttpClientResponse;
 import com.nesscomputing.httpclient.internal.HttpClientBodySource;
 import com.nesscomputing.httpclient.internal.HttpClientMethod;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 
 /**
  * This pretty well doubles as an example use case of the {@link TestingHttpClientBuilder}.

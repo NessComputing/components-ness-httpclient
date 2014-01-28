@@ -16,12 +16,10 @@
 package com.nesscomputing.httpclient;
 
 
+import com.nesscomputing.httpclient.testsupport.LocalHttpService;
+
 import org.junit.Assert;
 import org.junit.Before;
-
-import com.nesscomputing.httpclient.HttpClient;
-import com.nesscomputing.httpclient.HttpClientRequest;
-import com.nesscomputing.httpclient.testsupport.LocalHttpService;
 
 
 public class TestBasicAuthHttpClient extends AbstractTestHttpClient

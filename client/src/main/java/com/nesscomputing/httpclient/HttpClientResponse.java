@@ -15,14 +15,14 @@
  */
 package com.nesscomputing.httpclient;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /** Response from the remote server. */
 public interface HttpClientResponse {

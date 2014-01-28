@@ -26,14 +26,14 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import org.easymock.EasyMock;
-import org.junit.Test;
-
 import com.nesscomputing.config.ConfigModule;
 import com.nesscomputing.httpclient.factory.httpclient4.ApacheHttpClient4Factory;
 import com.nesscomputing.httpclient.factory.httpclient4.ApacheHttpClientAccess;
 import com.nesscomputing.httpclient.guice.HttpClientModule;
 import com.nesscomputing.httpclient.internal.HttpClientFactory;
+
+import org.easymock.EasyMock;
+import org.junit.Test;
 
 public class TestObserverGroups
 {

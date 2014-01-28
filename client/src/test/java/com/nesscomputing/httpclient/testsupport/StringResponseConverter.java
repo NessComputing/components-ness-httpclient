@@ -24,11 +24,11 @@ import java.io.InputStream;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-
 import com.nesscomputing.httpclient.HttpClientResponse;
 import com.nesscomputing.httpclient.response.ContentConverter;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 
 
 @Immutable

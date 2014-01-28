@@ -21,16 +21,16 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-import net.jpountz.lz4.LZ4BlockInputStream;
-
-import org.apache.commons.io.input.NullInputStream;
-import org.apache.commons.lang3.StringUtils;
-
 import com.nesscomputing.httpclient.HttpClientResponse;
 import com.nesscomputing.httpclient.HttpClientResponseHandler;
 import com.nesscomputing.httpclient.io.SizeExceededException;
 import com.nesscomputing.httpclient.io.SizeLimitingInputStream;
 import com.nesscomputing.logging.Log;
+
+import net.jpountz.lz4.LZ4BlockInputStream;
+
+import org.apache.commons.io.input.NullInputStream;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**

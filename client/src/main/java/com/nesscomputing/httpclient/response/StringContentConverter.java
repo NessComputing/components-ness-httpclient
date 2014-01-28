@@ -15,7 +15,6 @@
  */
 package com.nesscomputing.httpclient.response;
 
-import com.nesscomputing.httpclient.HttpClientResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +25,8 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.base.Objects;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
+
+import com.nesscomputing.httpclient.HttpClientResponse;
 
 /**
  * A basic implementation of ContentConverter when you only want a string back.

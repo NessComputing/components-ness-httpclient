@@ -16,13 +16,13 @@
 package com.nesscomputing.httpclient.factory.httpclient4;
 
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.AbstractHttpEntity;
+import java.io.IOException;
+import java.io.InputStream;
 
 import com.nesscomputing.httpclient.internal.HttpClientBodySource;
 
-import java.io.IOException;
-import java.io.InputStream;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.AbstractHttpEntity;
 
 
 /**

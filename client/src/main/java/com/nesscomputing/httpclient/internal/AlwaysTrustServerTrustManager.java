@@ -15,9 +15,10 @@
  */
 package com.nesscomputing.httpclient.internal;
 
-import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
+import javax.net.ssl.X509TrustManager;
 
 /**
  * A wrapper around another X509TrustManager that always trusts server certificates.

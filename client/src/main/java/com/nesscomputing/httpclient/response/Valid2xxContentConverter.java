@@ -15,11 +15,12 @@
  */
 package com.nesscomputing.httpclient.response;
 
-import com.nesscomputing.httpclient.HttpClientResponse;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.annotation.concurrent.Immutable;
+
+import com.nesscomputing.httpclient.HttpClientResponse;
 
 /**
  * Returns true for a 200/201/204 response code, false otherwise. Can be set to explode if response code != 200/201/204.

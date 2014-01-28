@@ -27,13 +27,13 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import org.easymock.EasyMock;
-import org.junit.Test;
-
 import com.nesscomputing.callback.Callback;
 import com.nesscomputing.callback.CallbackCollector;
 import com.nesscomputing.callback.CallbackRefusedException;
 import com.nesscomputing.httpclient.HttpClientResponse;
+
+import org.easymock.EasyMock;
+import org.junit.Test;
 
 public class TestStreamedJsonContentConverter
 {

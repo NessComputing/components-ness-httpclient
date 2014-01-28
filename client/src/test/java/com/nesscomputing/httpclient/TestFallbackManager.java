@@ -20,19 +20,16 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 
 import javax.net.ssl.SSLException;
-import javax.net.ssl.SSLPeerUnverifiedException;
+
+import com.google.common.io.Resources;
+
+import com.nesscomputing.httpclient.response.ContentResponseHandler;
+import com.nesscomputing.httpclient.testsupport.StringResponseConverter;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.google.common.io.Resources;
-import com.nesscomputing.httpclient.HttpClient;
-import com.nesscomputing.httpclient.HttpClientDefaults;
-import com.nesscomputing.httpclient.HttpClientResponseHandler;
-import com.nesscomputing.httpclient.response.ContentResponseHandler;
-import com.nesscomputing.httpclient.testsupport.StringResponseConverter;
-import com.nesscomputing.testing.lessio.AllowNetworkAccess;
+import org.kitei.testing.lessio.AllowNetworkAccess;
 
 @AllowNetworkAccess(endpoints={"*:443"})
 public class TestFallbackManager {
