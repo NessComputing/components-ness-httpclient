@@ -17,9 +17,6 @@ package com.nesscomputing.httpclient.response;
 
 import static java.lang.String.format;
 
-import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.logging.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,6 +29,9 @@ import com.google.common.base.Objects;
 import com.google.common.base.Throwables;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
+
+import com.nesscomputing.httpclient.HttpClientResponse;
+import com.nesscomputing.logging.Log;
 
 /**
  * A basic implementation of ContentConverter that returns a number.

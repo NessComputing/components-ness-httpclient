@@ -21,6 +21,8 @@ import java.security.Principal;
 
 import javax.security.auth.Subject;
 
+import com.google.common.io.Resources;
+
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.security.DefaultIdentityService;
 import org.eclipse.jetty.security.IdentityService;
@@ -39,9 +41,7 @@ import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.security.Password;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
-
-import com.google.common.io.Resources;
-import com.nesscomputing.testing.lessio.AllowNetworkListen;
+import org.kitei.testing.lessio.AllowNetworkListen;
 
 @AllowNetworkListen(ports={0})
 public class LocalHttpService

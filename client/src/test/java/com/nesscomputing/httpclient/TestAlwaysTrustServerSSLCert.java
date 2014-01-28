@@ -16,24 +16,22 @@
 package com.nesscomputing.httpclient;
 
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.fail;
 
-import com.nesscomputing.httpclient.HttpClient;
-import com.nesscomputing.httpclient.HttpClientDefaults;
-import com.nesscomputing.httpclient.HttpClientResponseHandler;
+import java.io.IOException;
+
+import javax.net.ssl.SSLException;
+
 import com.nesscomputing.httpclient.response.ContentResponseHandler;
 import com.nesscomputing.httpclient.testsupport.GenericTestHandler;
 import com.nesscomputing.httpclient.testsupport.LocalHttpService;
 import com.nesscomputing.httpclient.testsupport.StringResponseConverter;
-import com.nesscomputing.testing.lessio.AllowNetworkAccess;
 
-import javax.net.ssl.SSLPeerUnverifiedException;
-import java.io.IOException;
-
-import static org.junit.Assert.fail;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.kitei.testing.lessio.AllowNetworkAccess;
 
 @AllowNetworkAccess(endpoints={"127.0.0.1:*"})
 public class TestAlwaysTrustServerSSLCert {
@@ -66,8 +64,8 @@ public class TestAlwaysTrustServerSSLCert {
             final String uri = "https://" + localHttpService.getHost() + ":" + localHttpService.getPort() + "/data";
             httpClient.get(uri, responseHandler).perform();
             fail();
-        } catch (SSLPeerUnverifiedException ignored) {
-            // success
+        } catch (SSLException e) {
+            // ignore
         }
     }
 

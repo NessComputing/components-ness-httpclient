@@ -16,17 +16,18 @@
 package com.nesscomputing.httpclient.response;
 
 
-import org.apache.commons.io.IOUtils;
-
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-import com.nesscomputing.httpclient.HttpClientResponse;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+
+import com.nesscomputing.httpclient.HttpClientResponse;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * ContentConverter implementation that exposes the response directly.

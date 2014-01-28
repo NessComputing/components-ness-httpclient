@@ -38,6 +38,21 @@ import javax.servlet.http.Cookie;
 import com.google.common.base.Preconditions;
 import com.google.common.net.HttpHeaders;
 
+import com.nesscomputing.httpclient.HttpClientAuthProvider;
+import com.nesscomputing.httpclient.HttpClientConnectionContext;
+import com.nesscomputing.httpclient.HttpClientDefaults;
+import com.nesscomputing.httpclient.HttpClientObserver;
+import com.nesscomputing.httpclient.HttpClientRequest;
+import com.nesscomputing.httpclient.HttpClientResponse;
+import com.nesscomputing.httpclient.HttpClientResponseHandler;
+import com.nesscomputing.httpclient.internal.AlwaysTrustServerTrustManager;
+import com.nesscomputing.httpclient.internal.HttpClientBodySource;
+import com.nesscomputing.httpclient.internal.HttpClientFactory;
+import com.nesscomputing.httpclient.internal.HttpClientHeader;
+import com.nesscomputing.httpclient.internal.HttpClientTrustManagerFactory;
+import com.nesscomputing.httpclient.internal.MultiTrustManager;
+import com.nesscomputing.logging.Log;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
@@ -73,21 +88,6 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
-
-import com.nesscomputing.httpclient.HttpClientAuthProvider;
-import com.nesscomputing.httpclient.HttpClientConnectionContext;
-import com.nesscomputing.httpclient.HttpClientDefaults;
-import com.nesscomputing.httpclient.HttpClientObserver;
-import com.nesscomputing.httpclient.HttpClientRequest;
-import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.httpclient.HttpClientResponseHandler;
-import com.nesscomputing.httpclient.internal.AlwaysTrustServerTrustManager;
-import com.nesscomputing.httpclient.internal.HttpClientBodySource;
-import com.nesscomputing.httpclient.internal.HttpClientFactory;
-import com.nesscomputing.httpclient.internal.HttpClientHeader;
-import com.nesscomputing.httpclient.internal.HttpClientTrustManagerFactory;
-import com.nesscomputing.httpclient.internal.MultiTrustManager;
-import com.nesscomputing.logging.Log;
 
 /** Apache HttpClient4 based implementation of {@link HttpClientFactory}. */
 public class ApacheHttpClient4Factory implements HttpClientFactory

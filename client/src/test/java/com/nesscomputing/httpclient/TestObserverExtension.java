@@ -31,12 +31,6 @@ import com.google.inject.Inject;
 import com.google.inject.Stage;
 import com.google.inject.name.Named;
 
-import org.eclipse.jetty.server.Request;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.nesscomputing.config.ConfigModule;
 import com.nesscomputing.httpclient.HttpClientRequest.Builder;
 import com.nesscomputing.httpclient.guice.HttpClientModule;
@@ -48,7 +42,13 @@ import com.nesscomputing.lifecycle.Lifecycle;
 import com.nesscomputing.lifecycle.LifecycleStage;
 import com.nesscomputing.lifecycle.guice.LifecycleModule;
 import com.nesscomputing.logging.Log;
-import com.nesscomputing.testing.lessio.AllowNetworkAccess;
+
+import org.eclipse.jetty.server.Request;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.kitei.testing.lessio.AllowNetworkAccess;
 
 @AllowNetworkAccess(endpoints={"127.0.0.1:*"})
 public class TestObserverExtension {

@@ -29,16 +29,17 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.servlet.http.Cookie;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+
 import com.nesscomputing.httpclient.internal.HttpClientBodySource;
 import com.nesscomputing.httpclient.internal.HttpClientFactory;
 import com.nesscomputing.httpclient.internal.HttpClientHeader;
 import com.nesscomputing.httpclient.internal.HttpClientMethod;
+
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -433,7 +434,7 @@ public class HttpClientRequest<T>
 
                 sb.append(URLEncoder.encode(key, encoding));
                 sb.append('=');
-                if (key != null) {
+                if (value != null) {
                     sb.append(URLEncoder.encode(value, encoding));
                 }
             }

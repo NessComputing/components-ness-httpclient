@@ -16,15 +16,13 @@
 package com.nesscomputing.httpclient.response;
 
 
-import org.junit.Assert;
-import org.junit.Before;
-
 import com.nesscomputing.httpclient.AbstractTestHttpClient;
 import com.nesscomputing.httpclient.HttpClient;
 import com.nesscomputing.httpclient.HttpClientRequest;
-import com.nesscomputing.httpclient.response.ContentResponseHandler;
-import com.nesscomputing.httpclient.response.StringContentConverter;
 import com.nesscomputing.httpclient.testsupport.LocalHttpService;
+
+import org.junit.Assert;
+import org.junit.Before;
 
 public class TestStringContentConverter extends AbstractTestHttpClient {
 

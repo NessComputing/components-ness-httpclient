@@ -16,10 +16,15 @@
 package com.nesscomputing.httpclient.factory.httpclient4;
 
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.httpclient.factory.httpclient4.InternalResponse;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -30,11 +35,6 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
 import org.junit.Test;
-
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
 
 public class InternalResponseTest {
 

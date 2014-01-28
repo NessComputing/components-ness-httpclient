@@ -20,17 +20,15 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.nesscomputing.httpclient.HttpClient;
-import com.nesscomputing.httpclient.HttpClientResponseHandler;
 import com.nesscomputing.httpclient.response.ContentResponseHandler;
 import com.nesscomputing.httpclient.testsupport.GenericReadingHandler;
 import com.nesscomputing.httpclient.testsupport.LocalHttpService;
 import com.nesscomputing.httpclient.testsupport.StringResponseConverter;
-import com.nesscomputing.testing.lessio.AllowNetworkAccess;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.kitei.testing.lessio.AllowNetworkAccess;
 
 @AllowNetworkAccess(endpoints={"127.0.0.1:*"})
 public class TestReading {

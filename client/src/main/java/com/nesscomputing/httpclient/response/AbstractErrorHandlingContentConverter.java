@@ -15,15 +15,16 @@
  */
 package com.nesscomputing.httpclient.response;
 
-import com.nesscomputing.httpclient.HttpClientResponse;
-import com.nesscomputing.logging.Log;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
+
+import com.nesscomputing.httpclient.HttpClientResponse;
+import com.nesscomputing.logging.Log;
 
 import org.apache.commons.io.IOUtils;
 

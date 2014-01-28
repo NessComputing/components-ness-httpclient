@@ -17,12 +17,13 @@ package com.nesscomputing.httpclient.testing;
 
 
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.nesscomputing.httpclient.HttpClientRequest;
 import com.nesscomputing.httpclient.internal.HttpClientMethod;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Matches a regex (or any regex if null) and a regexp for the path.

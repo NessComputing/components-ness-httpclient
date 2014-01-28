@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import com.google.common.base.Preconditions;
+
 import com.nesscomputing.httpclient.factory.httpclient4.ApacheHttpClient4Factory;
 import com.nesscomputing.httpclient.internal.HttpClientFactory;
 import com.nesscomputing.httpclient.internal.HttpClientMethod;
